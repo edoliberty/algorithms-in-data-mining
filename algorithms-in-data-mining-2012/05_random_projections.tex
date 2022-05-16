@@ -1,11 +1,9 @@
 \documentclass{article}
-
-\input{environment.tex}
-
-\title{Random Projections} %
+\usepackage{algorithms_in_data_mining}
 
 \begin{document} %
-\maketitle
+\lecture{5}{Random Projections}{Edo Liberty}
+
 We will give a simple proof of the following, rather amazing, fact. Every set of $n$ points 
 in a Euclidian space (say in dimension $d$) can be embedded into the Euclidian space of 
 dimension $k = O(\log(n)/\eps^2)$ such that all pairwise distances are preserved up distortion $1\pm \eps$.
@@ -213,21 +211,7 @@ $O(ck\log^2(n)/\eps^2) = O(\eps^2 k^3)$.
 Putting this together we get a total running time of $O(d\log(d) + \eps^2 k^3)$ instead of the straight forward $O(kd)$. 
 
 \bibliographystyle{unsrt}
-\bibliography{AlgorithmsInDataMining.bib}
+\bibliography{algorithms_in_data_mining.bib}
 
 \end{document}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-%%%%%%%%

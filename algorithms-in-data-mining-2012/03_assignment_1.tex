@@ -1,13 +1,8 @@
 \documentclass{article}
-
-\input{environment.tex}
-
-\title{Assignment 1} %
+\usepackage{algorithms_in_data_mining}
 
 \begin{document} %
-\date{\nonumber}
-\maketitle
-
+\lecture{3}{Assignment 1}{Edo Liberty}
 
 \section{Approximating the size of a tree}
 \subsection*{setup}
@@ -79,10 +74,6 @@ Compute a value for $p$ (as low as possible) which gives that $z_1 \le \theta N(
 then $n_i (1+\eps)\ge z_i \ge n_i (1-\eps)$ and if $n_i < \theta N (1-2\eps)$ then $z_i \le \theta N (1-\eps)$ with probability at least $1-\delta$. 
 \item Compare this result with the algorithm described in class for approximately counting frequent items in streams, which is better under what circumstances?
 \end{enumerate}
-
-
-
-
 
 
 \end{document}
