@@ -1,0 +1,160 @@
+\input{environment.tex}
+\begin{document} %
+\lecture{8}{Home Assignment, Due Dec 31st}{Edo Liberty}
+
+\section{Randomized meta-algorithms}
+\subsection*{setup}
+In this question we assume the common case where we have an input $x \in X$  
+and we wish to approximate a function $f:X \rightarrow \R^+$ (i.e. $\forall x\;\;f(x) \ge 0$).
+For that we have a black box randomized algorithm $A:X\rightarrow \R^+$ such that $\E[A(x)] = f(x)$.
+The questions ask you to designing meta algorithms using $A$ as a black box. 
+\subsection*{question}
+\begin{enumerate}
+\item Show that
+\[
+\Pr[A(x) \ge 3f(x)] \le \frac{1}{3}
+\]
+\item Assume that for all $x$ we have that $\Var[A(x)] \le c\cdot [f(x)]^2$.
+Describe an algorithm $B_2$ such that for any two constants $\eps,\delta > 0$:
+\[
+\Pr[|B_2(x) - f(x)| \ge \eps f(x)] \le \delta
+\]
+\item Assume that $\Pr[|A(x) - f(x) | \le t|] \ge \frac{1}{2}+\eta$ for some fixed value $\eta > 0$.
+In words, the algorithm gets an additive approximation $t$ with probability slightly better than $1/2$.
+(Here we do not assume anything on the variance of $A(x)$).
+Design and algorithm $B_3$ such that for any prescribed $\delta >0$
+\[
+\Pr[|B_3(x) - f(x) | \le t|] \ge 1 - \delta
+\]
+That means the algorithm achieves the same additive approximation with probability arbitrary close to one.
+\end{enumerate}
+
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Set intersections} 
+\subsection*{setup}
+We have a universe of $N$ items $A = \{a_1,\ldots, a_N\}$
+and $m$ subsets $S_i \subset A$, $i \in \{1,\ldots,m\}$.
+We assume that given a set $S_i$ we can iterate over its elements one by one.
+The exercise will deal with approximating the size of different unions of these sets.  
+Here you are tasked with designing an algorithm. 
+Your algorithm is allowed to preprocess the sets $S$ in and produce data structures ($preprocess(S)$)
+It should then be able to take as input a set of indexed $I \subset \{1,\ldots,m\}$ and produce
+an $\eps$ approximation to $|\cup_{i \in I}S_i|$ with probability at least $1-\delta$ ($estimateUnionSize(I)$).
+The aim is to create an algorithm which runs in time $o(\sum_{i \in I}|S_i|)$ and requires $o(|\cup_{i \in I}S_i|)$ space. 
+That means that simply iterating through the lists and keeping items in a hash lookup table is not an adequate solution. 
+
+\begin{enumerate}
+\item Describe $preprocess(S)$ which is the preparatory stage of the algorithm and results in our choice of data structures.
+\item Describe $estimateUnionSize(I)$ which return an $\eps$ approximation to $|\cup_{i \in I}S_i|$ with probability $1-\delta$.
+\item Prove your algorithm's correctness.
+\item What is the space usage of your data structures?
+\item What is the runtime complexity of $estimateUnionSize(I)$?
+\end{enumerate}
+
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Weak random projections}
+\subsection*{setup}
+In this question we will construct a simple and weak proof of the Johnson-Lindenstrauss lemma. 
+Given two vectors $x,y \in\R^{d}$ we will find two new vectors $x',y'\in \R^{k}$ such that from $x'$ and
+$y'$ we could approximate the value of $||x-y||$. The idea is to
+define $k$ vectors $r_i \in \R^{d}$ such that each $r_i(j)$ takes a
+value in $\{+1,-1\}$ uniformly at random. Setting $x'(i) =
+r_{i}^{T}x$ and $y'(i) = r_{i}^{T}y$ the questions will lead you through arguing that
+$\frac{1}{k}||x' -y'||_{2}^{2} \approx ||x-y||_{2}^{2}$.
+
+\subsection*{questions}
+\begin{enumerate}
+\item Let $z = x-y$, and $z' = x' - y'$. Show that $z'(\ell) =
+r_{\ell}^{T}z$ for any index $\ell \in [1,\ldots,k]$.
+
+\item Show that $E[\frac{1}{k}||z'||_{2}^{2}] = E[(z'(\ell))^2] = ||z||_{2}^{2}$.
+\item Show that
+\[
+\var[(z'(\ell))^2] \le 4||z||_{2}^{4}.
+\]
+Hint: for any vector $w$ we have $||w||_4 \le ||w||_2$.
+\item From 3 (even if you did not manage to show it) claim that
+\[
+\var[\frac{1}{k}||z'||_{2}^{2}] \le 4||z||_{2}^{4}/k.
+\]
+\item Use 3 and Chebyshev's inequality do obtain a value for $k$
+for which:
+\[
+(1-\eps)||x-y||_{2}^{2} \le \frac{1}{k}||x' -y'||_{2}^{2} \le
+(1+\eps)||x-y||_{2}^{2}
+\]
+with probability at least $1-\delta$.
+\end{enumerate}
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{SVD and the power method}
+\subsection*{setup}
+
+Here we will prove some basic facts about singular values, matrices, and the power method.
+For the reminder of the question we assume $A \in \R^{m \times n}$ is an arbitrary matrix.
+For convenience and w.l.o.g. assume $m \le n$ and denote by $\sigma_1 \ge \ldots \sigma_m \ge 0$
+the singular values of $A$.
+Define the numeric rank of a matrix $\rho(A)$ to be $\rho(A) = \|A\|^{2}_{fro}/\|A\|^2_2$. $\rho(A)$ is a smoothed
+version of the algebraic rank $rank(A)$. It is always true that $1\le \rho(A) \le Rank(A) \le \min(m,n)$.
+If $\rho(A) \le 1 +\eps$ for a sufficiently small $\eps$ the matrix is ``close'' to being of rank $1$.
+
+\subsection*{question}
+
+\begin{enumerate}
+\item Let $P \in \R^{m \times m}$ and $Q \in \R^{n \times n}$ be unitary matrices.
+Show that $\|PAQ\|_{fro} = \|A\|_{fro}$.
+Hint, begin with the case where one of the matrices $P$ or $Q$ are the identity matrix.
+\item Using the above show that for any matrix $A$ we have that 
+\[
+\|A\|_{fro} = \sqrt{\sum_{i=1}^{m}\sigma_{i}^{2}}.
+\]
+It might help you to show that $\|A\|^{2}_{fro} = tr(AA^T)$ where $tr(\cdot)$ stands for the matrix trace.
+\item Give an expression to the numeric rank of $A$ only in terms of its singular values $\sigma_i$. 
+\item Express the numerical rank of $(AA^T)^{k}A$ only in terms of  $\sigma_i$.
+\item Assume that the matrix $A$ is such that $\sigma_2/\sigma_1 \le \eta$ for some $\eta < 1$.
+Use your expressions from above to find $k$ such that $\rho((AA^T)^{k}A)) \le  1+ \eps$.
+How does this relate to the the Power Method for computing the largest singular value and vectors of $A$?
+\end{enumerate}
+
+
+
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%

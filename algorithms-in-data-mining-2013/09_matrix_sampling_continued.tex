@@ -1,0 +1,231 @@
+\input{environment.tex}
+\begin{document} %
+\lecture{9}{Matrix approximation continued}{Edo Liberty}
+
+
+\subsection*{Recap} Last class was dedicated to approximating matrices by sampling individual entries from them.
+We used the following useful concentration result for sums of random matrices.
+
+\begin{lemma}[Matrix Bernstein Inequality \cite{CandesRechtMatrixBernsteinInequality}]
+Let $X_1,\ldots, X_s$ be independent $m \times n$ matrix valued random variables such that 
+\[
+\forall _{k \in [s]} \mbox{\;\;\;\;} \E[X_k] = 0 \mbox{\;\;\;\;and\;\;\;\;} \|X_k\| \le R
+\]
+Set $\sigma^2 = \max\{\|\sum_k \E[X_k X_k^T]\|, \|\sum_k \E[X_k^T X_k]\|\}$ then
+\[
+\Pr[\|\sum X_{k}\| > t] \le (m+n)e^{-\frac{t^2}{\sigma^2 + Rt/3}}
+\]
+\end{lemma}
+%
+\noindent We obtained an approximate sampled matrix $B$ which was sparser than $A$.
+For example, for a matrix $A$ containing values in $\{1,0,-1\}$ it sufficed that $B$ contains only $s$ entries and 
+\[
+s \in O\left(\frac{nr \log(n/\delta)}{\eps^2}\right).
+\]
+Moreover, we got that $\|A - B\| \le \eps \|A\|$. 
+We also claimed that we can compute the PCA projection of $B$, $P_k^B$ instead of that of $A$, $P_k$ and still have:
+ \[
+ \sigma_{k+1} =  \|A - P_k A\|  \le \|A - P_k^B A\| \le \sigma_{k+1} + \eps\|A\|
+ \]
+
+\noindent In this class we will reduce the amount of space needed to be independent of $n$. We will do this by approximating $AA^T$ directly.
+Here we follow the ideas in \cite{rvSamplingFromLargeMatrices2007} and give a much simpler proof which, unfortunately, obtains slightly worse bounds.
+
+\subsection*{PCA with an approximate covariance matrix}
+Here we see that approximating $BB^T \sim AA^T$ is sufficient in order to compute an approximate PCA projection (Lemma 3.8 in \cite{rvSamplingFromLargeMatrices2007}).
+Let $P_k^B$ denote the projection on the top $k$ left singular values of $B$.  
+\begin{eqnarray}
+\|A - P_k^B A\|^2 &\le& \sup_{x, \|x\|=1} \|xA - xP_k^B A\|^2 \\
+&=& \sup_{x \in null(P_k^B), \|x\|=1} \|xA\|^2 \\
+&=& \sup_{x \in null(P_k^B), \|x\|=1} \|xAA^T\| \\
+&\le& \sup_{x \in null(P_k^B), \|x\|=1} \|x(AA^T-BB^T)\|  + \|xBB^T\|^2\\
+&\le& \|AA^T - BB^T\| + \sigma_{k+1}\E(BB^T)\\
+&\le& 2\|AA^T - BB^T\| + \sigma_{k+1}(AA^T)
+\end{eqnarray}
+The last transition is due to the fact that $ \sigma_{k+1}(BB^2) \le  \sigma_{k+1}(AA^T) + \|AA^T - BB^T\|$.
+By taking the square root and recalling that $\sigma_{k+1}(AA^T) = \sigma_{k+1}^2(A)  \dot{=}  \sigma_{k+1}^2$ we get:
+\[
+\|A - P_k^B A\| \le \sqrt{\sigma_{k+1}^2 + 2\|AA^T - BB^T\|} \le \sigma_{k+1} +\sqrt{2\|AA^T - BB^T\|}
+\]
+Therefore, we have that 
+\[
+\sqrt{2\|AA^T - BB^T\|} \le \eps\|A\| \Longrightarrow \|A - P_k^BA\| \le \sigma_{k+1}+\eps\|A\|
+\]
+
+\subsection*{Column subset selection by sampling}
+From this point on, our goal is to find a matrix $B$ such that $\|AA^T - BB^T\|$ is small and $B$ is as sparse or small as possible.
+Note that 
+\[
+AA^T = \sum_{j=1}^{n}A_jA_j^2
+\]
+where we denote by $A_j$ the $j$'th column of the matrix $A$.
+Let 
+\[
+B \leftarrow A_j/\sqrt{p_j} \mbox{ with probability } p_j
+\]
+Computing the expectation of $BB^T$ we have 
+\[
+\E[BB^T] = \sum_{j=1}^{n} p_j (A_j/\sqrt{p_j})(A_j/\sqrt{p_j})^T = \sum_{j=1}^{n} A_jA_j^T = AA^T
+\]
+Clearly, we cannot hope to approximate the matrix $A$ with only one column. 
+We therefore define $B$ to be $s$ such sampled columns from $A$ side by side.
+\[
+B = \frac{1}{\sqrt{s}}[B_1 | \ldots | B_s]
+\]
+Just to clarify, $B$ is an $m \times s$ matrix containing $s$ columns from $A$ (rescaled) and $B_k \leftarrow A_j/\sqrt{p_j}$ with probability $p_j$.
+Computing the expectation of $BB^T$ we get that 
+\[
+\E[BB^T] = \sum_{k=1}^{s} \E[\frac{1}{s}B_kB_k^T] = \E[B_kB_k^T] = AA^T
+\] 
+
+We are now ready to use the matrix Bernstein inequality above: 
+\[
+\|BB^T - AA^T\| = \|\sum_{k=1}^{s}  \frac{1}{s}(B_kB_k^T - AA^T)\| = \|\sum_{k=1}^{s}  X_k\|
+\]
+To make things simpler we pick $p_j = \|A_j\|^2/\|A\|_F^2$. In words, the columns are picked with probability proportional to their squared $2$ norm.
+\[
+R = \max \|X_k\| \le \max_{j=1}^{n} \|  \frac{1}{s}A_jA_j^T/p_j\| +  \|\frac{1}{s}AA^t\| = \frac{1}{s}\|A\|_F^2 + \frac{1}{s}\|A\|_2^2
+\]
+\begin{eqnarray}
+\sigma^2 &=& \|\sum_k \E[X_k X_k^T]\| = \frac{1}{s}\|\E[B_k B_k^TB_k B_k^T - AA^TAA^T]\| \\
+&\le& \frac{1}{s}\|\sum_{j=1}^{n}p_jA_j A_j^TA_j A_j^T/p_j^2\|+ \frac{1}{s}\|A\|_2^4 = \frac{1}{s} \|A\|_F^2\|A\|_2^2 + \frac{1}{s} \|A\|_2^4
+\end{eqnarray}
+
+Plugging both expressions into the matrix Chernoff bound above we get that
+\[
+\Pr[\|BB^T - AA^T\| > \eps^2\|A\|_2^2/2] \le 2me^{-\frac{s\eps^4\|A\|_{2}^{4}/4}{\|A\|_F^2\|A\|_2^2 + \|A\|_2^4 + \eps^2\|A\|_2^2\|A\|_F^2/3 + \eps^2\|A\|_2^4/3}}
+\]
+By using that $\|A\|_F \ge \|A\|_2$ and that $\eps \le 1$ and denoting the numeric rank of $A$ by $r = \|A\|_F^2/\|A\|_2^2$ we can simplify this to be
+\[
+\Pr[\|BB^T - AA^T\| > \eps^2\|A\|_2^2/2] \le 2me^{-\frac{s\eps^4}{16r}}
+\]
+To conclude, it is enough to sample 
+\[
+s \ge \frac{16r}{\eps^4}\log(2m/\delta)
+\] 
+columns from $A$ (with probability proportional to their squared 2 norm) to form a matrix $B$ such that $\|BB^T - AA^T\| \le \eps^2\|A\|_2^2/2$ with probability at least $1-\delta$. According to above this also gives us that $\|A - P_k^BA\| \le \sigma_{k+1} + \eps\|A\|$ which completes our claim.
+Note that the number of non zeros in $B$ is bounded by $s\cdot m$ which is independent of $n$, the number of columns.
+This is potentially significantly better than the results obtained in last week's class.
+ 
+ 
+\begin{remark}
+More elaborate column selection algorithms exist which provide better approximation but these will not be discussed here.
+See \cite{Boutsidis2011} for the latest result that I am aware of.
+\end{remark}
+
+\subsection*{Deterministic Lossy SVD}
+
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\tr}{\operatorname{tr}}
+
+I this section we will see that the above approximation can be improved using a simple trick \cite{LibertyMatrixSketching2012}.
+The algorithm keeps an $m \times s$ sketch matrix $B$ which is updated
+every time a new column from the input matrix $A$ is added. 
+It maintains the invariant that the last column in the sketch is always zero.
+When a new input row is added it is places in the last (all zeros) column of the sketch.
+Then, using its $SVD$ the sketch is rotated from the right so that its columns are orthogonal.
+Finally, the sketch column norms are `shrunk' so that the last column is again all zeros. 
+In the algorithm we denote by $[U,\Sigma,V] \leftarrow SVD(B)$ the Singular Value Decomposition of $B$.
+We use the convention that $U \Sigma V^T = B$, $U^{T}U = V^{T}V = I$, 
+and $\Sigma = \diag([\sigma_1,\ldots,\sigma_s])$,  \;$\sigma_1 \ge \ldots \ge \sigma_s$.
+The notation $I$ stands for the $s \times s$ identity matrix while $B_s$ denotes the $s$'th column of $B$ (similarly $A_j$).
+\begin{algorithm} 
+%\caption{\FD}
+\label{alg}
+\begin{algorithmic}
+\STATE {\bf Input:} $s, \;\;A \in \R^{m \times n}$ 
+\STATE $B^{0} \leftarrow $ all zeros matrix $\in \R^{m \times s}$  
+\FOR{$i \in [n]$}
+	\STATE $C^{i} = B^{i-1}$ \hfill %\# Only for proof notation
+	\STATE $C^{i}_{s} = A_i$ \hfill Put $A_i$ in the last (all zeros) column of $C^{i}$
+	\STATE $[U^{i},\Sigma^{i},V^{i}] \leftarrow SVD(C^{i})$ %\hfill \# Only for proof notation
+	%\STATE \hfill \# $U \Sigma V = B$,  \;$U^{T}U = VV^{T} = I_{\ell}$
+	%\STATE \hfill \# $\Sigma = \diag([\sigma_1,\ldots,\sigma_\ell])$,  \;$\sigma_1 \ge \ldots \ge \sigma_\ell$
+	\STATE $D^{i} \leftarrow  U^{i}\Sigma^{i}$  %\hfill \# Only for proof notation
+	\STATE $\delta_i \leftarrow \Sigma^{i}_{s,s}$ %\hfill \# $\Sigma_{\ell,\ell}$ the least singular value of $B$
+	\STATE $W^{i} \leftarrow \sqrt{I - \Sigma^{-2}\delta^2_i}$
+	%\STATE \hfill \# $I_{\ell}$ is an $\ell \times \ell$ identity matrix
+	\STATE $B^{i} \leftarrow D^{i}W^{i}$ %\hfill \# Here $B_{\ell}$ contains zeros since $\bar{\Sigma}_{\ell,\ell} = 0$
+\ENDFOR
+\STATE {\bf Return:} $B \leftarrow B^{n}$ 
+\end{algorithmic}
+\end{algorithm}
+
+\begin{lemma}
+Let $B$ be the output of the above algorithm for a matrix $A$ and an integer $s$ then:
+\[
+\|AA^T - BB^T\| \le \|A\|_F^2/s
+\]
+\end{lemma}
+\begin{proof}
+We start by bounding $\|AA^T - BB^T\|$ from above:
+\[
+\|AA^T - BB^T\| = \max_{\|x\|=1} (x^TAA^Tx - x^TBB^Tx) = \max_{\|x\|=1} (\|x^TA\|^2 - \|x^TB\|^2).
+\]
+We open this with a simple telescopic sum $\|x^TB\|^2 = \sum_{j=1}^{n}\|x^TB^{i}\|^2 - \|x^TB^{i-1}\|^2$ and by replacing $\|x^TA\|^2 = \sum_{j=1}^{n}(x^TA_j)^2$.
+\begin{eqnarray}
+\|x^TA\|^2 - \|x^TB\|^2 &=& \sum_{j=1}^{n} [ (x^TA_j)^2  - (\|x^TB^{i}\|^2 - \|x^TB^{i-1}\|^2)]\\
+&=& \sum_{j=1}^{n} [ ((x^TA_j)^2  + \|x^TB^{i-1}\|^2)   - \|x^TB^{i}\|^2 ]\\
+&=& \sum_{j=1}^{n} [ \|x^TC^{i}\|^2   - \|x^TB^{i}\|^2 ]\\
+&=& \sum_{j=1}^{n} [ \|x^TD^{i}\|^2   - \|x^TD^{i}W^{i}\|^2 ]\\
+&=& \sum_{j=1}^{n}  x^T[D^{i}(D^{i})^{T}   - D^{i}(W^{i})^{2}(D^{i})^{T}]x \\
+&=& \sum_{j=1}^{n}  x^T[\delta_{i}^2 D^{i} (\Sigma^{i})^{-2}(D^{i})^T]x \\
+&=& \sum_{j=1}^{n}  x^T[\delta_{i}^2 U^{i}(U^{i})^T]x \\
+&\le& \sum_{j=1}^{n} \delta_{i}^2 \|U^{i}(U^{i})^T\| \le \sum_{j=1}^{n} \delta_{i}^2
+\end{eqnarray}
+%
+\noindent For this to mean anything we have to bound the term $\sum_{j=1}^{n} \delta_{i}^2$. We do this computing the Frobenius norm of $B$.
+\begin{eqnarray}
+\|B^{n}\|_{F}^{2} &=& \sum_{i=1}^{n} \|B^{i}\|_{F}^{2} - \|B^{i-1}\|_{F}^{2}\\
+&=& \sum_{i=1}^{n} [\|B^{i}\|_{F}^{2} - \|D^{i}\|_{F}^{2}] + [\|D^{i}\|_{F}^{2} - \|C^{i}\|_{F}^{2}] + [\|C^{i}\|_{F}^{2} -  \|B^{i-1}\|_{F}^{2}]
+\end{eqnarray}
+Let us deal with each term separately: 
+\begin{eqnarray}
+\|B^{i}\|_{F}^{2} - \|D^{i}\|_{F}^{2} &=& \tr(B^{i}(B^{i})^{T} - D^{i}(D^{i})^{T}) = \tr(\delta^2_i U^{i}(U^{i})^2) = s\delta^2_i\\
+\|D^{i}\|_{F}^{2} - \|C^{i}\|_{F}^{2} &=& 0\\
+\|C^{i}\|_{F}^{2} -  \|B^{i-1}\|_{F}^{2} &=& \|A_i\|^2
+\end{eqnarray}
+Putting these together we get 
+\[
+\|B\|_{F}^{2} = \|B^{n}\|_{F}^{2}  = \|A\|_F^2 - s \sum \delta_{i}^2
+\]
+Since $\|B\|_{F}^{2} \ge 0$ we conclude that $\sum \delta_{i}^2 \le \|A\|_F^2/s$
+Combining with the above:
+\[
+\|BB^T - AA^T\| \le \|A\|_F^2/s
+\]
+\end{proof}
+\noindent Finally, we recall that to achieve the approximation guarantee
+$\|A - P_k^BA\| \le \sigma_{k+1} + \eps\|A\|$ it is sufficient to require $\|BB^T - AA^T\| \le \eps^2\|A\|_2^2/2$ which is obtained when
+\[
+s \ge \frac{2r}{\eps^2}
+\]
+This completes the claim.
+\subsection*{Discusion}
+Note that while the deterministic lossy SVD procedure requires less space it also requires more operations per column insertion.
+Namely, it computes the SVD of the sketch in every iteration. 
+This can be somewhat improved (see \cite{LibertyMatrixSketching2012}) but it is still far from being as efficient as column sampling.
+Making this algorithm faster while maintaining its approximation guaranty is an open problem.
+Another interesting problem is to make this algorithm take advantage of the matrix sparsity.
+
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{AlgorithmsInDataMining.bib}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%

@@ -1,0 +1,243 @@
+\input{environment.tex}
+\begin{document} %
+\lecture{3}{Item frequency estimation in streams}{Edo Liberty}
+
+%\maketitle
+
+
+Say we are given a stream of elements $X = [x_1,\ldots,x_N]$ where $x_i \in \{a_1,\ldots,a_n\}$.
+Let $n_i$ denote the number of times element $a_i$ appeared in the stream, i.e., $f_i = |\{ j | x_j = a_i \}|$.
+Our goal is to estimate $f_i$ for all frequent elements.
+This can be solved exactly by keeping a counter for each element $\{a_1,\ldots,a_n\}$. 
+Alas, this might require, $\Theta(n)$ memory. Here we look for methods to approximate the values on $f_i$ using $o(n)$ memory.
+
+\section{Sampling}
+
+The first and simplest approach is to use the uniform sampling approach above.
+That is, the algorithm draws samples uniformly at random from the stream with probability $\ell /N$.
+Using Chernoff along with the union bound 
+indicates that $\ell \in O(\log(n/\delta)/\eps^2)$ is sufficient.
+Applying the union bound more carefully reduces the failure probability and therefore reduces $\ell$, 
+the expected number of samples.
+
+
+
+\section{Count Min-Sketches}
+Note that the space dependence of random sampling on $\eps$ is inversely quadratic which might be problematic for small values of $\eps$. 
+Count-Min sketches were introduced in \cite{CormodeM05}\cite{MankuM02} in two similar variants.
+They reduce the space complexity dependence on $\eps$ to only $1/\eps$.
+The creation of the sketch is given in Algorithm~\ref{alg:countMinSketches1}.
+The notation is that $h_1,\ldots,h_t$ are hash functions from the space of elements to the integers $[\lceil 2/\eps \rceil]$.
+%When the sketch is queried for the frequency of item $a$ it returns $min_{j \in \lceil \log(n/\delta) \rceil} C[j,h_j(a)]$.
+\begin{algorithm}
+\caption{Count Min Sketch: Add}
+\label{alg:countMinSketchesAdd}
+\begin{algorithmic}
+\STATE {\bf Input:} $\eps, A$ 
+\STATE $t \leftarrow \lceil \log(n/\delta) \rceil$, $b \leftarrow \lceil 2/\eps \rceil$
+\STATE $C \leftarrow$ all zeros matrix of size $t \times b$
+\FOR {$i \in [N]$}
+	\FOR {$j \in [t]$}
+		\STATE $C[j,h_j(A_i)] = C[j,h_j(A_i)] + 1$
+	\ENDFOR
+\ENDFOR
+\STATE {\bf Return:} $C$ 
+\end{algorithmic}
+\end{algorithm}
+%
+\begin{algorithm}
+\caption{Count Min Sketch: Query}
+\label{alg:countMinSketchesQuery}
+\begin{algorithmic}
+\STATE {\bf Input:} $C$, $a$ 
+\STATE {\bf Return:} $\min_{j=1,\ldots,t} C[j,h_j(a)]$ 
+\end{algorithmic}
+\end{algorithm}
+
+To see why this works consider only one row of the sketch matrix.
+The value of $C[1,a]$ contains the frequency of $a$ but also the sum of frequencies of all other items $b$ for which $h_1(b) = h_1(a)$.
+Since the event that $h_1(b) = h_1(a)$ happens with probability $\eps/2$ we have $\E[C[1,a]  - f_a] \le N\eps/2$ by linearity of expectation. 
+By Markov's inequality we have that $\Pr[C[1,a] - f_a \ge \eps N] \le 1/2$.
+Therefore, any row in $C$ provides a good approximate count for $a$ with probability at least $1/2$.
+Since we return the minimal value of $\log[n/\delta]$ such estimates our failure probability reduces to $\delta/n$.
+Using the union bound we get that all items receive a good approximation with probability at least $1-\delta$.
+Note that we get the same guaranties as in the sampling solution but the space requirement reduced from 
+$O(\log(n/\delta)\eps^2)$ to $O(\log(n/\delta)/\eps)$. Alas, the update time increases from $O(1)$ to $O(\log(n/\delta))$.
+In the next section we see how this can be improved and even derandomized.
+
+\section{Frequent Items}
+
+The item frequency approximation problem a brilliantly simple and deterministic algorithm in \cite{Misra1982}.
+This algorithm was later rediscovered independently by both \cite{DemaineLopezAlejandroMunro2002} and \cite{Karp03asimple} who 
+also improved its update time complexity.
+Their algorithm reduces the space requirement from $O(\log(n/\delta)/\eps)$ to $O(1/\eps)$.
+Their algorithm is given in Algorithm box \ref{alg:LossyCounting}.
+%
+\begin{algorithm} 
+\caption{Lossy counting}
+\label{alg:LossyCounting}
+\begin{algorithmic}
+\STATE {\bf Input:} $\eps \in (0,1], \;\;A$ 
+\STATE $\ell \leftarrow \lceil 1/\eps \rceil$
+\STATE $C \leftarrow$ empty map from $a$ to the integers with returned default value $0$
+\FOR {$i \in [N]$}
+	\STATE $C[A_i] = C[A_i] +1$
+	\IF {$size(C) = \ell$}
+		\FOR {$a \in C$}
+			\STATE $C[a] = C[a]-1$
+			\IF {$C[a] = 0$}
+				\STATE $del(C[a])$
+			\ENDIF
+		\ENDFOR
+	\ENDIF
+\ENDFOR
+\STATE {\bf Return:} $C$ 
+\end{algorithmic}
+\end{algorithm}
+%
+To prove the algorithm's correctness, let $n'$ denote the sum of all counters in the returned map $C$.
+Let $\delta_i = 1$ if the inner loop of the algorithm is executed in the $i$`th iteration and zero else. 
+Note that in each iteration the sum of counters is increased by $1$ and reduced by $\ell \delta_i$. 
+Therefore $N' = \sum_{i=1}^{N} 1 - \ell \delta_i = N - \ell \sum_{i=1}^{N}\delta_i$. 
+This gives that $\sum_{i=1}^{N}\delta_i \le (N-N')/\ell \le \eps (N-N')$. 
+Since $N' \ge 0$ and any single item counter is decreased at most $\sum_{i=1}^{N}\delta_i$ times we get that $f_a \ge C[a] \ge f_a - \eps N$.
+
+This reduces the amount of memory from $O(\log(n/\delta)/\eps)$ required by Count-Min sketches to $O(1/\eps)$.
+Moreover, some modifications to the data structure in the algorithm \cite{Karp03asimple} allow updates to require only $O(1)$ operations.
+This significantly improves on the $O(\log(n/\delta))$ operations required by Count-Min sketches.
+As a last remark, note that this algorithm is deterministic which eliminates the failure probability altogether.
+
+\section{Count Sketches}
+In many cases where frequent items are sought the guaranty that $|f_i - g_i| \le \eps N = \eps\sum_{j=1}^{n}f_j$ is insufficient.
+For example, if the item distribution is very skewed, a few most frequent items can correspond to most of the appearances in the stream. 
+Thus, a more desirable guaranty would be of the form $|f_i - g_i| \le \eps N = \eps\sum_{j=k+1}^{n}f_j$ for some prespecified $k$.
+Here we assume without loss of generality that the items are indexed in decreasing frequency order.
+  
+One idea from \cite{Charikar02findingfrequent} suggests that this in possible by using $O(k \log(n/\delta))$ approximate counters.
+First, we create $3k$ different approximate counters and distribute elements between them using a hash function.
+So, only with probability $1/3$ element $a$ falls into the same sketch as one of the top $k$ element.
+Therefore, with probability $2/3$, the sketch containing  $a$ will give a frequency  approximation guaranty proportional to $\eps \sum_{j=k+1}^{n}f_j$. Since this only happens with probability $2/3$ we must repeat the construction $O(\log(n/\delta))$ times and return the median
+of the results returned by the counters.
+
+The second idea is to alter the approximate counters themselves by incorporating a random sign into the summation.
+That is, when element $a$ is encountered, its counter is incremented by $s(a)$ where $s$
+is a hash function mapping items from the universe uniformly into $\{-1,1\}$.
+This reduces the approximation error to be relative to $O(\sqrt{\sum_{j=k+1}^{n}f^2_j})$.
+
+\begin{algorithm}
+\caption{Count Sketch: Add}
+\label{alg:CountSketchAdd}
+\begin{algorithmic}
+\STATE {\bf Input:} $\eps$, $A$ 
+\STATE $C \leftarrow$ all zeros matrix of size $t \times b$
+\FOR {$i \in [N]$}
+	\FOR {$j \in [t]$}
+		\STATE $C[j,h_j(A_i)] = C[j,h_j(A_i)] + s_j(A_i)$
+	\ENDFOR
+\ENDFOR
+\STATE {\bf Return:} $C$ 
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+\caption{Count Sketch: Query}
+\label{alg:CountSketchAdd}
+\begin{algorithmic}
+\STATE {\bf Input:} $C$, $a$
+\STATE {\bf Return:} $\operatorname{median}_{j =1,\ldots,t} C[j,h_j(a)]s(a)$ 
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{AlgorithmsInDataMining.bib}
+
+\end{document}
+
+
+
+\section*{Count Sketches}
+
+Here we learn about a structure names CountSketch which was suggested in \cite{Charikar02findingfrequent}. 
+It will allow us to estimate the frequency of the $k$ most frequent items in a stream even if it is less than a constant fraction of the stream.
+There will, however, be other limitations.
+
+We denote the elements by $o_1,\ldots,o_m$ having each appeared $n_1 \ge \ldots \ge n_m$
+(the names of the elements are ordered according to their frequency).
+Before describing the CountSketch structure, let us first analyze one of its building blocks.
+For lack of a more creative name, we will call it $B$.
+$B$ is an array of length $b$ which is associated with two hash functions:
+$h: o \rightarrow [1,\ldots,b]$ and $s: o \rightarrow [-1,1]$.
+  
+We define two function for $B$ one for adding elements into it.
+\begin{enumerate}
+\item define $Add(o)$:
+\item \tab $B[h(o)] = B[h(o)] + s(o)$. 
+\end{enumerate} 
+and one for returning an estimate for $n_i$ given $o_i$
+\begin{enumerate}
+\item define $Query(o)$:
+\item \tab return $B[h(o)]s(o)$. 
+\end{enumerate} 
+
+In order to compute the expectation of $B[h(o)]s(o)$ we need to define the ``inverse" of $h$. 
+Let $h^{-1}(o_i) = \{o_j | h(o_j) = h(o_i)\}$. In words, $h^{-1}(o_i)$ is the set of all elements for $h(o_i)=h(o_j)$.
+Since each element in $o_j \in h^{-1}(o_i)$ is encountered exactly $n_j$ times and for each of those $s(o_j)$ is added to $B[h(o)]$
+we have that $B[h(o_i)] = \sum_{o_j \in h^{-1}(o_i)} n_j s(o_j)$. Let us compute the expected result of a query.
+\begin{eqnarray*}
+\E[B[h(o_i)]s(o_i)] &=& \E[\sum_{o_j \in h^{-1}(o_i)} n_j s(o_j)s(o_i)] \\
+&=& n_i + \E[\sum_{o_j \in h^{-1}(o_i),o_i \ne o_j} n_j s(o_j)s(o_i)] = n_i
+\end{eqnarray*}
+
+As a reminder, we are interested in the frequencies $n_1,\ldots,n_k$, for the top $k$ most items.
+We see that if $b > 8k$ we have that $|h^{-1}(o_i)\cap\{o_1,\ldots,o_k\} |=0$ with probability at least $7/8$.
+In other words, the element $o_i$ does not map under $h$ to the same cell in $B$ with any of the top $k$ frequency items.
+We will define $h^{-1}_{>k} = h^{-1}(o_i)\cap\{o_{k+1},\ldots,o_m\}$.
+We will assume from this point on that $h^{-1}(o_i) \subset \{o_{k+1},\ldots,o_m\}$ or in other words that $h^{-1}_{>k} = h^{-1}(o_i)$.
+
+Now, let us bound the variance of $B[h(o_i)]s(o_i)$.
+\begin{eqnarray*}
+Var(B[h(o_i)]s(o_i)) &\le & E[B[h(o_i)]^2 s(o_i)^2] \\
+&=& E[(\sum_{o_j \in h^{-1}_{>k}(o_i)} n_j s(o_j))(\sum_{o_{j'} \in h^{-1}_{>k}(o_i)} n_{j'} s(o_{j'}))]\\
+&= & E_h \sum_{o_j \in h^{-1}_{>k}(o_i)} \sum_{o_{j'} \in h^{-1}_{>k}(o_i)} E_s [n_j n_{j'} s(o_j) s(o_{j'}) ]\\
+&= &E_h  \sum_{o_j \in h^{-1}_{>k}(o_i)}n^2_j \\
+&= &\sum_{j = k+1}^{m}n^2_j / b
+\end{eqnarray*}
+Note that we have both an expectation over the choice of the hash function $s$ and over the hash function $h$.
+
+Using this bound on the variance of $B[h(o_i)]s(o_i)$ and Chebyshev's inequality we attain that:
+$$
+\Pr\left[ \left| B[h(o_i)]s(o_i) - n_i \right| > \sqrt{8 \sum_{j = k+1}^{m}n^2_j / b} \right] \le 1/8
+$$
+
+However, note that we also demanded that none of the top $k$ elements map to the same cell as $o_i$
+which only happened with probability $7/8$. Using the union bound on these two events we get:   
+$$
+\Pr\left[ \left| \hat{n}_i - n_i \right| \le \gamma \right] \ge 3/4
+$$
+where we denote $\hat{n}_i =  B[h(o_i)]s(o_i)$ and $\gamma = \sqrt{8 \sum_{j = k+1}^{m}n^2_j / b}$.
+
+Note that this happens for every elements individually only with constant probability.
+We would like to get that this holds with probability $1-\delta$ for all elements simultaneously.
+We do that by repeating this entire structure $t$ times creating the CountSketch $B_1,\ldots,B_t$.
+When inserting an element we insert it into all $t$ arrays $B_i$ and above. 
+When querying the CountSketch we return $query(o_i) = Median(\hat{n}^1_i,\ldots,\hat{n}^t_i)$ where $\hat{n}^\ell_i$
+is the estimator $\hat{n}_i$ from $B_\ell$. 
+
+Because $\Pr\left[ \left| \hat{n}_i - n_i \right| \le \gamma \right] \ge 3/4$ we get from Chernoff's inequality that
+at least half the values $\hat{n}^\ell_i$ will be such that $\left| \hat{n}^\ell_i - n_i \right| \le \gamma$ (including the median)
+for all $m$ elements with probability at least $1-\delta$ for $t \in O(log(m/\delta))$.
+
+The only thing left to do is set the correct value for $b$ (the length of $B$).
+We will demand that $\gamma \le \epsilon n_k$. This gives $b \ge 8\sum_{i=k+1}^{m}n^2_i/\eps^2 n_k^2$.
+Therefore, for $t = O(log(m/\delta))$ and $b \ge 8\max(k,\frac{\sum_{i=k+1}^{m}n^2_i}{\eps^2 n_k^2})$
+with probability at least $1-\delta$ for each element in the stream $|\hat{n}_i - n_i| \le \eps n_k$.
+
+
+
+The algorithm for finding the most frequent items is therefore to go over the stream and keep a CountSketch 
+of all the elements seen this far. When we process an element, we also estimate it's frequency $\hat{n}$ an keep the top $k$
+most frequent items in estimated frequencies. These are guaranteed to to contain all elements $o_i$ for which $n_i > (1+2\eps)n_k$
+and not to contain any element  $o_i$ for which $n_i < (1-2\eps)n_k$.
+
