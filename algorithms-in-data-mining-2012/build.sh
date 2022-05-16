@@ -1,6 +1,12 @@
+rm *.aux
+rm *.bbl
+rm *.blg
+rm *.dvi
+rm *.log
+
 for FILE in *.tex; do 
-	latex $FILE; 
-	bibtex $FILE; 
-	latex $FILE; 
-	latex $FILE; 
+	pdflatex $FILE; 
+	bibtex "${FILE%.*}" ;
+	pdflatex $FILE; 
+	pdflatex $FILE; 
 done
