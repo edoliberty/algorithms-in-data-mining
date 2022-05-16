@@ -1,9 +1,8 @@
-\input{environment.tex}
-\begin{document} %
+\documentclass{article}
+\usepackage{AlgorithmsInDataMining}
+\begin{document}
+
 \lecture{3}{Item frequency estimation in streams}{Edo Liberty}
-
-%\maketitle
-
 
 Say we are given a stream of elements $X = [x_1,\ldots,x_N]$ where $x_i \in \{a_1,\ldots,a_n\}$.
 Let $n_i$ denote the number of times element $a_i$ appeared in the stream, i.e., $f_i = |\{ j | x_j = a_i \}|$.

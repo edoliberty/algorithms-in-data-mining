@@ -1,5 +1,7 @@
-\input{environment.tex}
-\begin{document} 
+\documentclass{article}
+\usepackage{AlgorithmsInDataMining}
+\begin{document}
+
 \lecture{1}{Mark and Recapture}{Edo Liberty}
 
 Suppose you are a marine biologist (Although you prefer to pretend to be an architect), and suppose you are tasked with counting the number of individuals in a huge school of fish in the middle of the Atlantic ocean. How would you go about doing that? One possible approach is called Mark and recapture.Start by catching $k$ fish. Then, mark them somehow and release them. Then catch another group of $k$ fish and count the number of fish that are already marked, $Z$.You can now guess that the number of fish in the entire school is roughly $k^2/Z$.
