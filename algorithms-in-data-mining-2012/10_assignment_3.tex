@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\input{environment.tex}
+
+\title{Assignment 3} %
+
+\begin{document} %
+\date{\nonumber}
+\maketitle
+
+\section{Randomized meta-algorithms}
+\subsection*{setup}
+In this question we assume the common case where we have an input $x \in X$  
+and we wish to approximate a function $f:X \rightarrow \R^+$ (i.e. $\forall x\;\;f(x) \ge 0$).
+For that we have a black box randomized algorithm $A:X\rightarrow \R^+$ such that $\E[A(x)] = f(x)$.
+The questions ask you to designing meta algorithms using $A$ as a black box. 
+\subsection*{question}
+\begin{enumerate}
+\item Show that
+\[
+\Pr[A(x) \ge 3f(x)] \le \frac{1}{3}
+\]
+\item Assume that for all $x$ we have that $\Var[A(x)] \le c\cdot [f(x)]^2$.
+Describe an algorithm $B_2$ such that for any two constants $\eps,\delta > 0$:
+\[
+\Pr[|B_2(x) - f(x)| \ge \eps f(x)] \le \delta
+\]
+\item Assume that $\Pr[|A(x) - f(x) | \le t|] \ge \frac{1}{2}+\eta$ for some fixed value $\eta > 0$.
+In words, the algorithm gets an additive approximation $t$ with probability slightly better than $1/2$.
+(Here we do not assume anything on the variance of $A(x)$).
+Design and algorithm $B_3$ such that for any prescribed $\delta >0$
+\[
+\Pr[|B_3(x) - f(x) | \le t|] \ge 1 - \delta
+\]
+That means the algorithm achieves the same additive approximation with probability arbitrary close to one.
+\end{enumerate}
+
+\pagebreak
+\section{SVD and the power method}
+\subsection*{setup}
+
+Here we will prove some basic facts about singular values, matrices, and the power method.
+For the reminder of the question we assume $A \in \R^{m \times n}$ is an arbitrary matrix.
+For convenience and w.l.o.g. assume $m \le n$. Also, denote by $\sigma_1 \ge \ldots \sigma_m \ge 0$
+the singular values of $A$.
+\subsection*{question}
+
+\begin{enumerate}
+\item Let $P \in \R^{m \times m}$ and $Q \in \R^{n \times n}$ be unitary matrices.
+Show that $\|PAQ\|_{fro} = \|A\|_{fro}$.
+Hint, begin with the case where one of the matrices $P$ or $Q$ are the identity matrix.
+\item Using the above show that for any matrix $A$ we have that 
+\[
+\|A\|_{fro} = \sqrt{\sum_{i=1}^{m}\sigma_{i}^{2}}.
+\]
+It might help you to show that $\|A\|^{2}_{fro} = tr(AA^T)$ where $tr(\cdot)$ stands for the matrix trace.
+\item The numerical rank of a matrix $\rho(A) = \frac{\|A\|^{2}_{fro}}{\|A\|^2_2}$ is a smoothed
+version of the algebraic rank $rank(A)$. It is always true that $1\le \rho(A) \le Rank(A) \le \min(m,n)$.
+If $\rho(A) \le 1 +\eps$ for a sufficiently small $\eps$ the matrix is ``close'' to being of rank $1$.
+Give an expression to the numerical rank of $A$ in terms of its
+singular values $\sigma_i$. Express the numerical rank of $(AA^T)^{k}A$ in term of  $\sigma_i$.
+\item Assume that the matrix $A$ is such that $\sigma_2/\sigma_1 \le \eta$ for some $\eta < 1$.
+Use your expressions from above to find $k$ such that $\rho((AA^T)^{k}A)) \le  1+ \eps$.
+How does this relate to the the Power Method for computing the largest singular value and vectors of $A$?
+\end{enumerate}
+
+
+
+
+
+\end{document}

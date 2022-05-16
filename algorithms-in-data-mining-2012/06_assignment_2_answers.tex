@@ -1,0 +1,105 @@
+\documentclass{article}
+
+\input{environment.tex}
+
+\title{Assignment 2} %
+
+\begin{document} %
+\date{\nonumber}
+\maketitle
+
+\section{Weak random projections}
+\subsection*{setup}
+In this question we will construct a simple and weak version of
+random projections. That is, given two vectors $x,y \in\R^{d}$ we
+will find two new vectors $x',y'\in \R^{k}$ such that from $x'$ and
+$y'$ we could approximate the value of $||x-y||$. The idea is to
+define $k$ vectors $r_i \in \R^{d}$ such that each $r_i(j)$ takes a
+value in $\{+1,-1\}$ uniformly at random. Setting $x'(i) =
+r_{i}^{T}x$ and $y'(i) = r_{i}^{T}y$ the questions will lead you through arguing that
+$\frac{1}{k}||x' -y'||_{2}^{2} \approx ||x-y||_{2}^{2}$.
+
+\subsection*{questions}
+\begin{enumerate}
+\item Let $z = x-y$, and $z' = x' - y'$. Show that $z'(\ell) =
+r_{\ell}^{T}z$ for any index $\ell \in [1,\ldots,k]$.
+
+\item Show that $E[\frac{1}{k}||z'||_{2}^{2}] = E[(z'(\ell))^2] = ||z||_{2}^{2}$.
+\item Show that
+\[
+\var[(z'(\ell))^2] \le 4||z||_{2}^{4}.
+\]
+Hint: for any vector $w$ we have $||w||_4 \le ||w||_2$.
+\item From 3 (even if you did not manage to show it) claim that
+\[
+\var[\frac{1}{k}||z'||_{2}^{2}] \le 4||z||_{2}^{4}/k.
+\]
+\item Use 3 and Chebyshev's inequality do obtain a value for $k$
+for which:
+\[
+(1-\eps)||x-y||_{2}^{2} \le \frac{1}{k}||x' -y'||_{2}^{2} \le
+(1+\eps)||x-y||_{2}^{2}
+\]
+with probability at least $1-\delta$.
+\end{enumerate}
+
+\section{Answers}
+\begin{enumerate}
+\item This is a consequence of the linearity of the operator. 
+\[
+z'(\ell) = x'(\ell) - y'(\ell) = r_{\ell}^{T}x - r_{\ell}^{T}y = r_{\ell}^{T}(x-y) = r_{\ell}^{T}z 
+\]
+\item Since $||z'||_{2}^{2} = \sum_{i=1}^{k}z'(i)^2$ and since $z'(i)$ are identically distributed we have that 
+$\E[\frac{1}{k}||z'||_{2}^{2}] = \E[\frac{1}{k}\sum_{i=1}^{k}z'(i)^2] = \E[(z'(\ell))^2]$.
+Now we compute $\E[(z'(\ell))^2]$.
+\begin{eqnarray}
+\E[(z'(\ell))^2] &=& \E[(\sum_{i=1}^{d} r_\ell(i) z(i))(\sum_{j=1}^{d} r_\ell(j) z(j))] \\
+&=& \E[\sum_{i=1}^{d} \sum_{j=1}^{d} r_\ell(i) r_\ell(j)z(i) z(j)] \\
+&=& \sum_{i=1}^{d} \sum_{j=1}^{d} \E[r_\ell(i) r_\ell(j)]z(i) z(j) \\
+&=& \sum_{i=1}^{d} z(i)^2  = \|z\|^2
+\end{eqnarray}
+The double summation was reduced to a single sum since $\E[r_\ell(i)r_\ell(j)] = 0$ if $i \ne j$.
+Also, if $i=j$ we have that $\E[r_\ell(i)r_\ell(j)]z(i)z(j) = z(i)^2$
+\item To compute $\var[(z'(\ell))^2]$ we start with computing $\E[(z'(\ell))^4]$.
+\begin{eqnarray*}
+\E[(z'(\ell))^4] &=& \E[(\sum_{i=1}^{d} r_\ell(i) z(i))(\sum_{j=1}^{d} r_\ell(j) z(j))(\sum_{k=1}^{d} r_\ell(k) z(k))(\sum_{m=1}^{d} r_\ell(m) z(m))] \\
+&=& \E[\sum_{i=1}^{d}\sum_{j=1}^{d}\sum_{k=1}^{d}\sum_{m=1}^{d}r_\ell(i)r_\ell(j)r_\ell(k)r_\ell(m)z(i)z(j)z(k)z(m)] \\
+&=& \sum_{i=1}^{d}\sum_{j=1}^{d}\sum_{k=1}^{d}\sum_{m=1}^{d} \E[r_\ell(i)r_\ell(j)r_\ell(k)r_\ell]z(i)z(j)z(k)z(m)\\
+&=& \sum_{i=1}^{d}x(i)^4 + {4 \choose 2} \sum_{i<j}z(i)^2 z(j)^2
+\end{eqnarray*}
+The last transition requires an explanation. The expectation of $r_\ell(i)r_\ell(j)r_\ell(k)r_\ell$ when the power of one of 
+the terms $r_\ell(i)$ is odd is zero. Thus, we are only left with terms of the form $x(i)^4$ and $x(i)^2 x(j)^2$.
+The coefficient of $x(i)^4$ is $1$ since there is only one what to obtain it. The coefficient of $x(i)^2 x(j)^2$ is ${4 \choose 2}$
+since two of the indexes should be $i$ and the two others $j$. There are ${4 \choose 2} = 6$ to get it.
+In what comes next we use the fact that:
+\[
+\sum_{i<j}z(i)^2 z(j)^2 = [\sum_{i=1}^{d}\sum_{j=1}^{d}z(i)^2 z(j)^2 -  \sum_{i=1}^{d}z(i)^4]/2
+\]
+Picking up where we left off:
+\begin{eqnarray*}
+\E[(z'(\ell))^4] &=& \sum_{i=1}^{d}x(i)^4 + 6 \sum_{i<j}z(i)^2 z(j)^2\\
+&=& \sum_{i=1}^{d}x(i)^4 + 3[\sum_{i=1}^{d}\sum_{j=1}^{d}z(i)^2 z(j)^2 -  \sum_{i=1}^{d}z(i)^4] \\
+&=& 3\|z\|_{2}^{4} - 2\|z\|_4^2 
+\end{eqnarray*}
+Finally we have that 
+\begin{eqnarray*}
+\var( z'(\ell)^2) &=& \E[(z'(\ell))^4]  -\E[(z'(\ell))^2]^2 \\
+&=& 3\|z\|_{2}^{4} - 2\|z\|_4^2 - (\|z\|_{2}^{2})^2 = 2(\|x\|_2^4 - \|x\|_4^4) \le 2\|x\|_2^4 
+\end{eqnarray*}
+\item Since $z'(\ell)$ are independent variables we have that 
+\[
+\var[\frac{1}{k}\|z'\|^2] = \var[\frac{1}{k} \sum_{\ell=1}^{k}z'(\ell)^2] =  \frac{1}{k^2}\sum_{\ell=1}^{k}\var[z'(\ell)^2] = \frac{1}{k}\var[z'(\ell)^2] \le 2\|x\|_2^4/k
+\]
+\item From Chebishev's inequality we have that 
+\[
+\Pr[|\frac{1}{k}\|z'\|^2 - \E[\frac{1}{k}\|z'\|^2]| \ge t] \le \frac{\var[\frac{1}{k}\|z'\|^2]}{t^2}
+\]
+Substituting $\E[\frac{1}{k}\|z'\|^2] = \|z\|^2$, $t = \eps\|z\|^2$ and $\var[\frac{1}{k}\|z'\|^2] \le 2\|x\|_2^4/k$ we get:
+\[
+\Pr[|\frac{1}{k}\|z'\|^2 - \|z\|]| \ge \eps \|z\|] \le \frac{2\|x\|_2^4/k}{\eps^2\|z\|^4} = \frac{2}{k\eps^2} 
+\]
+By setting $k \ge \frac{2}{\eps^2 \delta}$ we get that $\Pr[|\frac{1}{k}\|z'\|^2 - \|z\|]| \ge \eps \|z\|] \le \delta$ which means that
+$\|z\|(1-\eps)\le \frac{1}{k}\|z'\|^2 \le \|z\|(1+\eps)$ with probability at least $1-\delta$.
+\end{enumerate}
+
+\end{document}

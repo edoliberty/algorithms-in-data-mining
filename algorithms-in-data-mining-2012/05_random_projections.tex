@@ -1,0 +1,233 @@
+\documentclass{article}
+
+\input{environment.tex}
+
+\title{Random Projections} %
+
+\begin{document} %
+\maketitle
+We will give a simple proof of the following, rather amazing, fact. Every set of $n$ points 
+in a Euclidian space (say in dimension $d$) can be embedded into the Euclidian space of 
+dimension $k = O(\log(n)/\eps^2)$ such that all pairwise distances are preserved up distortion $1\pm \eps$.
+We will follow ideas from \cite{JL84} and \cite{DasGuptaGupta99} and later improve on running time using 
+methods introduced in \cite{AilonCh06}.
+
+\section*{Random projection}
+We will argue that a certain distribution over the choice of a matrix $R \in \R^{k \times d}$ gives that:
+\begin{equation}
+\label{e1}
+\forall x \in \R^{d} \;\; \Pr\left[ \left| ||\frac{1}{\sqrt{k}}Rx|| - ||x|| \right| > \eps||x|| \right] \le \frac{1}{n^2} 
+\end{equation}
+Before we pick this distribution and show that Equation~\ref{e1} holds for it, let us first see
+that this gives the opening statement. 
+
+Consider a set of $n$ points $x_1,\ldots, x_n$ in Euclidian space $\R^d$. Embedding these points
+into a lower dimension while preserving all distances between
+them up to distortion $1\pm \eps$ means approximately preserving the norms of all 
+${n \choose 2}$ vectors $x_i - x_j$. Assuming Equation~\ref{e1} holds and using the union 
+bound, this property will fail to hold for at least one $x_i - x_j$ pair with probability at most ${n \choose 2}\frac{1}{n^2} \le 1/2$.
+Which means that all ${n \choose 2}$ point distances are preserved up to distortion $\eps$ with probability at least $1/2$.
+
+
+\section{i.i.d. gaussian distribution}
+We consider the distribution of matrices $R$ such that each $R(i,j)$ is drawn independently from  a
+normal distribution with mean zero and variance $1$, $R(i,j) \sim \N(0,1)$. We show that for this
+distribution Equation~\ref{e1} holds for some $k \in O(\log(n)/\eps^2)$.
+
+First consider the random variable $z = \sum_{i=1}^{d}r(i)x(i)$ where $r(i) \sim \N(0,1)$. 
+To understand how the variable $z$ distributes we recall the two-stability of the
+normal distribution. Namely, if $z_3 = z_2 + z_1$ and 
+$z_1 \sim \N(\mu_1,\sigma_{1})$ and $z_2 \sim \N(\mu_2,\sigma_{2})$ then, $$z_3 \sim \N(\mu_1 + \mu_2,\sqrt{\sigma^{2}_{1} + \sigma^{2}_{2}}).$$
+In our case,  $r(i)x(i) \sim \N(0,x_{i})$ and therefore, $z = \sum_{i=1}^{d}r(i)x(i) \sim \N(0,\sqrt{\sum_{i=1}^{d}x^{2}_{i}}) \sim \N(0,||x||) \sim  ||x||y$ 
+where $y_i \sim \N(0,1)$.
+%
+Now, note that each element in the vector $Rx$ distributes exactly like $z$.
+Defining $k$ identical copies of $z$, $z_1,\ldots,z_k$,
+We get that $||\frac{1}{\sqrt{k}}Rx||$ distributes exactly like:
+\[
+||\frac{1}{\sqrt{k}}Rx|| \sim \sqrt{\frac{1}{k}\sum_{i=1}^{k} z^{2}_{i}} \sim ||x||\sqrt{\frac{1}{k}\sum_{i=1}^{k} y^{2}_{i}}
+\]
+%
+Thus, proving Equation~\ref{e1} reduces to showing that:
+\begin{equation}
+\Pr\left[ \left| \sqrt{\frac{1}{k}\sum_{i=1}^{k} y^{2}_{i}} - 1 \right| > \eps \right] \le \frac{1}{n^2} 
+\end{equation}
+
+The sum of $k$ squared normal variables is a very known distribution called chi-square with $k$ degrees of freedom, denoted by $\chi^2_k$.
+It is exactly defined by $\chi^2_k = \sum_{i=1}^{k} y^{2}_{i}$ where $y_i \sim \N(0,1)$.
+Since $\chi^2_k$ is a sum of independent random variables, due to the central limit theorem, $\chi^2_k$ converges to a normally distributed quantity as $k$ grows. We will use here a slightly different property $\sqrt{\chi^2_k} \sim_{k \rightarrow \infty} \N(\sqrt{k},1/\sqrt{2})$. 
+Somewhat sloppily, we will assume that $k$ is large enough so that it is harmless to substitute:
+$$\sqrt{\chi^2_k} \sim \N(\sqrt{k},1/\sqrt{2})$$
+%
+I that case we have$ \sqrt{\frac{1}{k}\sum_{i=1}^{k} y^{2}_{i}} -1\sim \N(0,\frac{1}{\sqrt{2k}})$.
+Thus, we only need to show that for a random variable $Z \sim \sqrt{2k}\left[\sqrt{\frac{1}{k}\sum_{i=1}^{k} y^{2}_{i}} -1\right]  \sim \N(0,1)$ it holds that  
+\begin{equation}
+\Pr\left[ | Z | > \eps \sqrt{2k}\right] \le \frac{1}{n^2} 
+\end{equation}
+We now use a simple bound on the error function
+$$\Pr[ Z  > t] =  \int_{t}^{\infty} \frac{1}{\sqrt{2\pi}}e^{-z^2/2}dz < \int_{t}^{\infty} \frac{1}{\sqrt{2\pi}}\frac{z}{t} e^{-z^2/2}dz  = \frac{1}{\sqrt{2\pi}}e^{-t^{2}/2}$$
+
+Setting $t=\eps \sqrt{2k}$ and noting that $\Pr[Z  > t] = \Pr[Z  < -t] $ we demand that $\frac{1}{\sqrt{2\pi}}e^{-\eps^2k} \le \frac{1}{2n^2}$. 
+This yields the bound $k \ge \frac{2\log(n)+O(1)}{\eps^2}$ which completes the proof.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Sparse Random Projections}
+The goal of this section is 
+The matrix $R$ will contain a non zero only w.p. $q$. That is, 
+$R(i,j) = N(0,1/\sqrt{q})$ with probability $q$ and zero else.
+Again, we define $y_i = \sum_{j}R(i,j) x_j = \sum_{j}b_{i,j} g_{i,j} x_j$ where $b_{i,j} = 1$ w.p. $q$ and $g_{i,j} \sim \N(0,1/\sqrt{q})$.
+For simplicity and w.o.l.g. we set $\|x\|_2 = 1$.
+
+First notice that $\E[y^2_i]  = 1$. Also, given the values of $b_{i,j}$ we have that $y_i$ is Gaussian.
+More accurately, $\sigma_{i}^2 = \sum_{j}  b_{i,j} x_{j}^{2}/q$ 
+
+First, let us see that this is sufficient in some sense
+\begin{eqnarray}
+\Pr[  \frac{1}{k} \sum_{i} y_{i}^{2} \ge (1+\eps)] &= &\Pr[  e^{\lambda\sum_{i} y_{i}^{2}} \ge e^{\lambda k(1+\eps)}] \\
+&\le & e^{-\lambda k(1+\eps)}\Pi_{i}\E [e^{\lambda y_{i}^{2}}]
+\end{eqnarray}
+
+Given $\sigma_i$ we have that $y_{i}$ is Gaussian and so we can compute $\E [e^{y_{i}^{2}}]$ exaclty.
+\begin{eqnarray}
+\E [e^{\lambda y_{i}^{2}}] &=& \frac{1}{\sqrt{2\pi \sigma^2_i}}\int_{\infty}^{\infty} e^{-\frac{y_{i}^{2}}{2\sigma^{2}_{i}}} e^{\lambda y_{i}^{2}} dy\\
+&=& \frac{1}{\sqrt{2\pi\sigma^2_i}}\int_{\infty}^{\infty} e^{-(\frac{1}{\sigma^2_i}- 2\lambda)\frac{y_{i}^{2}}{2}} dy\\
+&=& \frac{1}{\sqrt{1-2\lambda \sigma^{2}_{i}}}
+\end{eqnarray}
+Note that we must enforce now that $2\lambda \sigma^2_i < 1$.
+Plugging this back into our formula we get 
+\begin{eqnarray}
+\Pr &\le& e^{-\lambda k(1+\eps)}\Pi_{i}\frac{1}{\sqrt{1-2\lambda \sigma^{2}_{i}}}\\
+&= &e^{-\lambda k(1+\eps)  + \frac{1}{2} \sum_{i}\log(\frac{1}{1-2\lambda \sigma^{2}_{i}})   }
+\end{eqnarray}
+We now use the Tailor expansion by $log(\frac{1}{1-x}) \ge x + x^2$
+\begin{eqnarray}
+\Pr &\le& e^{-\lambda k(1+\eps)  + \frac{1}{2} \sum_{i} 2\lambda \sigma^{2}_{i}   + 4\lambda^2 \sigma^{4}_{i}}\\
+&\le& e^{ \lambda (\sum_{i} \sigma^{2}_{i} - k) - \lambda k \eps  + \sum_{i} 2\lambda^2 \sigma^{4}_{i}}\\
+\end{eqnarray}
+
+Now, assume that $\sigma^2_i \le 1+\eps/2$ (we will fix this soon) then
+\begin{eqnarray}
+\Pr &\le& e^{ - \lambda k \eps/2  + 2\lambda^2 \sum_{i}\sigma^{4}_{i}}\\
+&\le&e^{ - \frac{1}{32} \frac{k^2\eps^2}{\sum_{i}\sigma_i^4}} \le e^{-ck\eps^2}
+\end{eqnarray}
+for some constant $c$. As before, invoking the union bound completes the proof for some $k \in O(\log(n)/\eps^2)$.
+
+
+Alas, we are left to show that $\sigma^2_i \le 1+\eps/2$. This is where the bounds on $q$ come in.
+We will see that this is not true for every vector $x$ and every value of $q$.
+Never the less, we'll be able to fix this and still gain on running time.
+Let us recap , $\sigma^2_i = \sum_{j} b_{i,j} x_j^2/q$ where $b_{i,j} = 1$ w.p. $q$ and zero otherwise. 
+Take for example $x = [1,0,\ldots,0]$. In this case $\sigma^2_i = b_{i,1}/q$ which is potentially $1/q$
+which is significantly more that $1+\eps/2$. On the other hand, consider the vector $x = [\frac{1}{\sqrt{d}},\dots,\frac{1}{\sqrt{d}}]$.
+In this case $\sigma^2_i =\frac{1}{d} \sum_{j} b_{i,j}/q$ whose expectation is $1$ 
+and which we expect from Chernoff's inequality to be less that $1+\eps/2$ w.h.p.
+
+Let us restrict our selves to vectors such that $\|x\|_\infty \le \eta$. I claim that the ``worst" vectors we can 
+have of this form contain $1/\eta^2$ entries of value $\eta$ and the rest zeros. This is a result 
+of the convexity of the moment generating functions of $\sigma^2_i$ with respect to $x$ and the fact
+that the set of possible values for $\|x\|_\infty \le \eta$ lies in a polytop. 
+Hence, the maximal value is attained in an extreme point as above.
+Computing for this vector we have $\sigma^2_i = \sum_{j=1}^{1/\eta^2} b_{i,j}\eta^2/q$.
+Bounding $\sigma^2_i$ by $1+\eps$ we get
+\begin{eqnarray}
+\Pr[\sigma^2_i \ge 1+\eps] &=& \Pr[\sum_{j=1}^{1/\eta^2} b_{i,j} - \frac{q}{\eta^2} \ge \frac{q\eps}{\eta^2}]\\
+&\le& e^{-\frac{q\eps^2}{2\eta^2}} \le \frac{1}{cnd} \mbox{ \;\;(fail w.p. at most $1/5$)}\\
+&\mbox{for}& q \ge \frac{3\log(n)\eta^2}{\eps^2}
+\end{eqnarray}
+Thus, if our vectors are ``spread" such that $\|x\|_\infty \le \eta < \frac{\eps}{\sqrt{3\log(n)}}$ we can save one computation and storage
+by being able to set $q < 1$. 
+
+
+\section{Fast Vector Spreading}
+
+
+The question is, can we actively make sure that $\|x\|_\infty$ is low.
+The answer is yes and a method for doing that was suggested in $\cite{AilonCh06}$.
+For this we will need to learn what Hadamard matrices are.
+Hadamard matrices are commonly used in coding theory and are conceptually
+close for Fourier matrices. We assume for convenience that $d$ is a power of $2$.
+The Walsh Hadamard transform of a vector $x \in \R^{d}$ is the
+result of the matrix-vector multiplication $Hx$ where $H$ is a $d
+\times d$ matrix whose entries are $H(i,j) = \frac{1}{\sqrt{d}}(-1)^{\langle
+i,j\rangle}$. Here ${\langle i,j\rangle}$ means the dot product over
+$F_2$ of the bit representation of $i$ and $j$ as binary vectors of
+length $\log(d)$.
+Another way to view this is to define Hadamard Matrices recursively.
+\begin{equation*} %
+H_{1} = \frac{1}{\sqrt{2}}\left(
+          \begin{array}{rr}
+            1 & 1 \\
+            1 & -1\\
+          \end{array}
+        \right)
+,\;\;
+        H_{d} = \frac{1}{\sqrt{2}}\left(
+          \begin{array}{r:r}
+            H_{d/2} & H_{d/2} \\ \hdashline
+            H_{d/2} & -H_{d/2}\\
+          \end{array}
+        \right)
+\end{equation*} %
+Here are a few interesting (and easy to show) facts about Hadamard matrices.
+\begin{enumerate}
+\item $H_d$ is a unitary matrix $\|Hx\| = \|x\|$ for any vector $x\in \R^d$.
+%\item $H_{d}(i,j) \in \{ \frac{1}{\sqrt{d}},- \frac{1}{\sqrt{d}}\}$
+\item Computing $x \mapsto Hx$ requires $O(d\log(d))$ operations.
+\end{enumerate}
+
+
+We also define a diagonal matrix $D$ to be such that $D(i,i) \in \{1,-1\}$ uniformly.
+Clearly, we have that $\|HDx\|_2 = \|x\|_2$ since both $H$ and $D$ are isotropies.
+Let us now bound $\|HDx\|_\infty$.
+$(HDx)(1) = \sum_{i=1}^{d}H(1,i)D(i,i) x_i = \sum_{i=1}^{d}\frac{x_i}{\sqrt{d}}s_i$ where $s_i \in \{-1,1\}$ uniformly.
+To bound this we recap Hoeffding's inequality.
+\begin{fact}[Hoeffding's inequality]
+Let $X_1,\ldots,X_n$ be independent random variables s.t. $X_i \in [a_i,b_i]$.
+Let $X = \sum_{i=1}^{n} X_i$.
+\begin{equation}
+\Pr[|X - \E[X]| \ge t] \le 2e^{-\frac{2 t^2}{\sum_{i=1}^{n} (b_i -a_i)^2}}
+\end{equation}
+\end{fact}
+Invoking Hoeffding's inequality and then the union bound we get that if $\|HDx\|_\infty \le \sqrt{\frac{c \log(n)}{d}}$ for all points $x$.
+Remark, for this we assumed $\log(d) = O(\log(n))$ otherwise we should have had $\log(nd)$ in the bound. 
+The situation, however, that the dimension is super polynomial in the number of points is unlikely. 
+Usually it is common to have $n > d$.
+
+
+\section{Fast Random Projecton}
+
+Combining fast spreading with sparse projections  we get the result in \cite{AilonCh06}.
+Randomly project vectors by $x \mapsto \frac{1}{\sqrt{k}}RHDx$.
+Computing $HDx$ requires $O(d\log(d))$ operations and guaranties that $\|HDx\|_\infty \le \eta = \sqrt{\frac{c\log(n)}{d}}$.
+Setting this into the bound on $q \ge \frac{3\log(n)\eta^2}{\eps^2}$ we get that is is sufficient to 
+have $q \ge \frac{c\log^2(n)}{d\eps^2}$. The expected number of non zeros in $R$ is $qkd$.
+Therefore, the expected running time required to compute $x' \mapsto Rx'$ is bounded from above by
+$O(ck\log^2(n)/\eps^2) = O(\eps^2 k^3)$.
+Putting this together we get a total running time of $O(d\log(d) + \eps^2 k^3)$ instead of the straight forward $O(kd)$. 
+
+\bibliographystyle{unsrt}
+\bibliography{AlgorithmsInDataMining.bib}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%

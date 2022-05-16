@@ -1,0 +1,176 @@
+\documentclass{article}
+\input{environment.tex}
+\title{Very short intro to Spectral Graph Theory}
+\date{\nonumber}
+
+\begin{document} %
+\maketitle
+
+\section{Introduction}
+Up until this point, we encountered a few different data types.
+These were either arbitrary elements, or elements in a metric space, vectors in a normed space, or matrices.
+Another very common type of data is a Graph.
+In many different scenarios a graph is the most natural representation of the data.
+Example include communication networks, transportation routes, online social networks etc.
+In these cases, a lot of information is captured by the connections (and their strengths) between the different elements.
+For example, the graph describing the physical layout of the internet infrastructure defines how well messages can pass
+or how robust it is to congestion. 
+Or, friendship connections between users in a social network can offer insights to their topics of interest.
+
+In this class we will review three ways to represent a graph as a matrix.
+The Adjacency matrix, the Markov transition matrix, and the Graph Laplacian.
+Relating properties of graphs to properties of the matrices which represent them is 
+researched in a subfield of computer science called Spectral Graph Theory.
+Here, we will barely scratch the surface of this vast literature.
+The aim is to provide some intuitions and access to the terminology.
+
+\section{The adjacency matrix}
+One of the most natural matrices associated with a graph $G(V,E)$ is the adjacency matrix.
+It is defined by $A(i,j) = 1$ if $\{i,j\} \in E$ and zero else.
+
+\begin{fact}
+Let $\alpha_1$ be the largest eigenvalue of $A$. Then, $\alpha_1 \le \max_i deg(i)$ 
+\end{fact}
+\begin{proof}
+Given in class.
+\end{proof}
+
+\begin{fact}
+Let $\alpha_1$ be the largest eigenvalue of $A$. Then, $\alpha_1 \ge \frac{1}{n} \sum_{i}deg(i)$ 
+\end{fact}
+\begin{proof}
+Given in class.
+\end{proof}
+
+\begin{fact}
+Let $\beta_1$ be the largest eigenvalue of $B$ which is the adjacency graph of $G$ with one node removed. 
+Then, $\beta_1 \le \alpha_1$. 
+\end{fact}
+\begin{proof}
+Given in class.
+\end{proof}
+
+
+\begin{fact}
+Let $\alpha_1$ be the largest eigenvalue of $A$. Then, the graph $G$ is $\lfloor \alpha_1 \rfloor +1$ colorable.
+\end{fact}
+\begin{proof}
+Given in class.
+\end{proof}
+
+
+\section{The Markov transition matrix}
+ 
+The adjacency matrix also defines the diffusion or Markov transition matrix of $G$.
+Let $D = diag(A \mathbf{1_n})$, that is $D(i,i) = \sum_{j}A(i,j)$.
+We define the transition matrix $M = AD^{-1}$. The columns of the matrix $M$ sum up to $1$.
+The entries of $M$ can be seen as giving transitional probability between nodes in the graph.
+That is, let $p_t$ denote the distribution over nodes in time $t$ then:
+\[
+p_{t+1} = Mp_{t}
+\]
+Let us see that there exists a stationery distribution $p_\infty$.
+\[
+p_\infty = \lim_{t \rightarrow \infty} p_t =  \lim_{t \rightarrow \infty} M^{t}  p_{0}
+\]
+Our goal is to understand the structure of $\lim_{t \rightarrow \infty} M^{t}$.
+\begin{fact}\label{qwerty}
+Let $d$ be the vector such that $d(i) = deg(i)/\sum_{j}deg(i)$. If the graph $G$ is 
+connected and {\it irreducible} then $\lim_{t \rightarrow \infty} M^{t} = d\allones^T$.
+\end{fact}
+Before we show that let us see what that means.
+\[
+p_\infty = \lim_{t \rightarrow \infty} p_t =  \lim_{t \rightarrow \infty} M^{t}  p_{0}  = d\allones^T p_0 = d
+\]
+That is, regardless of the original distribution, after a sufficient number of steps we arrive at 
+a terminal distribution which remains unchanged. Surprisingly, the probability of being at node $i$ is
+relative only to its degree $deg(i)$ and does not depend on the structure of the graph.
+
+Let's turn to proving fact \ref{qwerty}. First, note that $M$ is congruent to the symmetric matrix  $D^{-1/2}AD^{-1/2}$
+\[
+M \sim D^{-1/2}MD^{1/2} = D^{-1/2}AD^{-1/2} \equiv \tilde{A}
+\]
+Where $\tilde{A}$ is the normalized adjacency matrix. 
+That means that $M$ and $\tilde{A}$ share the same eigenvalues and that their eigenvectors are related.
+\[
+f^{T}M = \lambda f^{T} \rightarrow f^{T}D^{1/2}D^{-1/2}MD^{1/2} = \lambda f^{T}D^{1/2} \rightarrow (f^{T}D^{1/2})\tilde{A} = \lambda (f^{T}D^{1/2})
+\]
+Which means that $\lambda$ is also an eigenvalue of $\tilde{A}$ which corresponds to eigenvector $f^{T}D^{1/2}$.
+
+
+\begin{fact}\label{asdfg}
+The top eigenvalue of $M$ is $1$ and the all other eigenvalues of $M$ are strictly smaller than $1$ if the graph $G$ is 
+connected and {\it irreducible} (which we will not define here).  
+\end{fact}
+\begin{proof}
+Given in class.
+\end{proof}
+
+Due to the above and since $\allones^TM = \allones^T$ we know that the top eigenvalue of $\tilde{A}$ is $1$ an its top eigenvector is proportional to $D^{1/2}\allones$. Since it must be normalized (eigenvectors have norm $1$) it must be $d^{1/2}$ were that means that $d^{1/2}(i) = \sqrt{deg(i)/\sum_{j}deg(i)}$.
+Moreover, since all other eigenvalues of $\tilde{A}$ are strictly smaller than $1$ we get that 
+\[
+\lim_{t \rightarrow \infty} \tilde{A}^t = 1^t \cdot (d^{1/2})(d^{1/2})^T
+\]
+Combining with the fact that:
+\[
+M^t = D^{1/2}\tilde{A}^t D^{-1/2}
+\]
+we get that 
+\[
+\lim_{t \rightarrow \infty} M^t = D^{1/2}\tilde{A}^t D^{-1/2} =  D^{1/2} (d^{1/2})(d^{1/2})^T D^{-1/2} = d \allones^T.
+\]
+
+\section{The graph Laplacian}
+
+The most natural matrix representing a graph (in my opinion) is the Graph Laplacian Matrix which is defined as:
+\[
+L = D - A
+\]
+The graph Laplacian is positive semidefinite and symmetric matrix which incapsulates many different properties of the graph.
+\begin{fact}
+The graph Laplacian $L$ is positive semidefinite.
+\end{fact}
+\begin{proof}
+Let us define $L_{i,j}$ as an $n \times n$ matrix whose entries are all zero apart for $L_{i,j}(i,i) = L_{i,j}(j,j) =1$ and  $L_{i,j}(i,j) = L_{i,j}(j,i) = -1$.
+We have that $L = \sum_{\{i,j\} \in E} L_{i,j}$. That means that if $L_{i,j}$ is positive than so is $L$.
+computing $x^T(L_{i,j})x  = (x_i - x_j)^2 \ge 0$ for all $x$. Therefore,  $x^T L x \ge 0$ for all $x$ which completes the proof.
+\end{proof}
+
+The vector $\allones_n$ exhibits $\allones_n^T L \allones_n = 0$. 
+That means that $L$ has at least one eigenvalue $0$. 
+
+\begin{fact}
+If the graph $G$ is connected then all other eigenvalues of $L$ are strictly positive.
+\end{fact}
+\begin{proof}
+Given in class
+\end{proof}
+
+\begin{fact}
+The multiplicity of the eigenvalue $0$ is equal to the number of connected components in $G$.
+\end{fact}
+\begin{proof}
+Given in class
+\end{proof}
+
+The second eigenvector of $L$, the one corresponding to the second smallest eigenvalue ($\lambda_2$) is an
+extremely important parameter of any graph. It tells us how well connected it is. We unfortunately cannot explain this here.
+The corresponding vector is called the Fiedler vector and is heavily used in spectral clustering.
+I will try to explain more in class if we have time.
+
+
+\bibliographystyle{plain}
+\bibliography{AlgorithmsInDataMining}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%

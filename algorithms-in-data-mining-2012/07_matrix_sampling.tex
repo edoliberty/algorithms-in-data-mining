@@ -1,0 +1,118 @@
+\documentclass{article}
+\input{environment.tex}
+\title{Matrix Sampling}
+\date{\nonumber}
+
+\begin{document} %
+\maketitle
+
+
+\section{Ashwelde-Winter inequality}
+In their work \cite{AhlswedeW02} Ashwelde and Winter give an incredibly useful bound for 
+the sums of independent random symmetric matrices.
+Here we recap the lemma statement. 
+A short proof due to Roman Vershynin \cite{VershyninMatrixChernoffBounds} is given as a reference.
+ 
+\begin{lemma}
+Let $X_i$ be independent random $d \times d$ symmetric matrices with mean zero s.t. $\|X_i\| \le 1$.
+Let $S_n = \sum_{i=1}^{n}X_i$, let $\sigma^2_i = \|\Var[X_i]\|$ and $\sigma^2 = \sum_{i=1}^{n}\sigma^2_i$ , then:
+\[
+\Pr[\| S_n - \E[S_n] \| \ge t] \le d\cdot \max\{e^{-\frac{t^2}{4\sigma^2}}, e^{\frac{-t}{2}}\}
+\] 
+\end{lemma}
+
+\section{Rank-k approximation}
+
+Here we try to approximate $AA^T$ by sampling columns of the matrix $A$.
+From this point onwards we assume, w.l.o.g. that $\|A\|_{fro} = 1$.
+
+Define $n$ unit norm matrices $C_i = A_{(i)}A_{(i)}^T/\|A_{(i)}\|^2$ where $A_{i}$ is the $i$'th column of $A$.
+Also define the random matrix valued variable $Z$ which takes values $C_i$ w.p. $p_i = \|A_{(i)}\|^2$.
+Note that $p$ is a distribution since $\sum_{i=1}^{n}p_i = \sum_{i=1}^{n}\|A_{(i)}\|^2 = \|A\|_{fro}^2 = 1$.
+Let us compute the expectation of $Z$:
+\[
+\E[Z] = \sum_{i=1}^{n}p_i C_i = \sum_{i=1}^{n}  \|A_{(i)}\|^2 (A_{(i)}A_{(i)}^T/\|A_{(i)}\|^2) =  \sum_{i=1}^{n} A_{(i)}A_{(i)}^T = AA^T
+\]
+We will therefore try to approximate $AA^T$ by averaging $r$ independent copies of such variables $\frac{1}{r}\sum_{i=1}^{r}Z_i$.
+\begin{eqnarray}
+\Pr[ \| \frac{1}{r}\sum_{i=1}^{r}Z_i - AA^T \| &>& \eps\|AA^T \|] = \Pr[ \| \sum_{i=1}^{r}(Z_i - AA^T) \| > r\eps\|AA^T \|] \\
+&=& \Pr[ \| \sum_{i=1}^{r}X_i \| > r\eps\|AA^T \|/2]
+\end{eqnarray}
+where we define $X_i = (Z_i - AA^T)/2$. To apply the matrix chernoff bound above we need to make sure that the variables $X_i$
+meet the conditions. First, they are clearly independent since $Z_i$ are. Also, they have mean zero since $\E[Z_i] = AA^T$.
+Finally, $\|X_i\| = \|(Z_i - AA^T)/2\| \le \|Z_i\|/2 + \|AA^T\|/2 \le 1$.
+Thus, to apply the bound above we only need to compute $\sigma^2 = \sum_{i=1}^{r} \|\E [X^2_i] \|$.
+\begin{eqnarray}
+\sigma^2_i &\le& \|\E [X^2_i] \| \le \|\E [ (Z_i - AA^T)^2 ]\|/2 \\
+&=&  \|\E [ Z^2_i - ZAA^T -  AA^TZ + (AA^T)^2]\|/2 \\
+&=& \| AA^T - (AA^T)^2 \|/2 \le \|AA^T\|/2
+\end{eqnarray}
+This gives that $\sigma^2 \le r\|AA^T\|/2$.
+\[
+ \Pr[ \| \sum_{i=1}^{r}X_i \| > r\eps\|AA^T\|/2] \le m \cdot e^{- \frac{r\eps^2\|AA^T\|}{8}}
+\]
+This gives us an $\eps$ approximation in the spectral norm with probability at least $1-\delta$ if $r \ge \frac{8 }{\|AA^T\| \eps^2}\log(m/\delta)$.
+Another trivial observation is that $1 = \|A\|_{fro}=tr(AA^T) \le m \|AA^T\|$  which gives that $\frac{1}{\|AA^T\|} \le m$.
+To recap, for any matrix, sampling $r = \frac{8m }{\eps^2}\log(m/\delta)$ columns is sufficient in order to approximate
+ $AA^T$ in the $2$-norm up to multiplicative factor $\eps\|AA^T\|$.
+
+
+
+\section{Rank-k Approximation}
+What does this tell us about the SVD. Note that the matrix resulting from the sampling above can be thought 
+of the matrix $\hat{A}\hat{A}^T$ where $\hat{A} \in \R^{m\times r}$ contains rescaled sampled columns of $A$.
+More accurately, $\hat{A}_{(i)} = \frac{1}{\sqrt{r}\|A_{(j)}\|}A_{j}$ if in step $i$ we picked column $j$ from $A$.
+
+We want to say that $\hat{A}$ somehow represents $A$ well. One way to say this is that the left singular vectors of $\hat{A}$
+and $A$ are ``similar'' (the right singular vectors are not in the same dimension) 
+To make this more accurate we recap the property of the best rank-k approximation of $A$
+\[
+\|A - P_k A\| = \sigma_{k+1}
+\]
+Where the projection matrix $P_k = U_{k}U_{k}^{T}$ contains the top $k$ left singular vectors of $A$.
+Now consider projecting $A$ on the top left singular vectors of $\hat{A}$ instead, how much do we ``loose" by that?
+
+A lemma 4 from \cite{Drineas03passefficient} makes this exact.
+
+\begin{lemma}
+Let $\hat{P}_k$ be the projection on the top $k$ left singular vectors of $\hat{A}$, then
+\[
+\|A - \hat{P}_k A\|^2 \le \sigma^2_{k+1} + 2\|\hat{A}\hat{A}^T -  AA^{T}\|
+\]
+\end{lemma}
+\begin{proof}
+To see this lets compute the supremum over values $\|x(A - \hat{P}_k A)\|$, clearly $x$ is such that $x\hat{P}_k = 0$.
+\begin{eqnarray}
+\|A - \hat{P}_k A\|^2 &=& \langle AA^T x,x\rangle \\
+&=& \langle (AA^T - \hat{A}\hat{A}^T) x,x \rangle + \langle \hat{A}\hat{A}^Tx, x\rangle \\
+&\le& ||AA^T - \hat{A}\hat{A}^T|| + \hat{\sigma}^2_{k+1}
+\end{eqnarray}
+Where $\hat{\sigma}_{k+1}$ is the $k+1$'th singular value of $\hat{A}$.
+Since, $\hat{\sigma}^{2}_{k+1} \le  \sigma^{2}_{k+1} +  ||AA^T - \hat{A}\hat{A}^T||$ we get the lemma.
+\end{proof}
+
+Finally, the SVD of $\hat{A}$ is a good approximation to the SVD of $A$ in the sense that 
+\[
+\|A - \hat{P}_k A\| \le \sigma_{k+1} + 2\eps\|A\|_2
+\]
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{AlgorithmsInDataMining.bib}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%

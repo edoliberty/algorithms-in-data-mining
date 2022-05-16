@@ -1,0 +1,87 @@
+\documentclass{article}
+\input{environment.tex}
+\title{Mark and Recapture} %
+\begin{document} %
+\maketitle
+
+Suppose you are a marine biologist (Although you prefer to pretend to be an architect), and
+suppose you are tasked with counting the number of individuals in a huge school of tune fish in 
+the middle of the atlantic ocean. How would you go about doing that? 
+One possible approach is called Mark and recapture.
+Start by catching $k$ fish. Then, mark them somehow 
+and release them. Then catch another group of $k$ fish and count the number of fish that are already marked, $Z$.
+You can now guess that the number of fish in the entire school is roughly $k^2/Z$.
+
+\section*{Mark and recapture}
+Given a set of $n$ elements, sample $k$ elements without replacement twice.
+Count the number of identical elements in both groups, $Z$.
+Define a random variable $z_{i,j}$ which indicates that
+element $i$ in the first group is the same as element $j$ in the second.
+The value of $Z$ is therefore $Z = \sum_{i,j} z_{i,j}$.
+Let's compute the expectation of $Z$ using linearity of expectation.
+Note that the $z_{i,j}$ variables are not independent!
+\begin{equation}
+E[Z] = E[\sum_{i,j} z_{i,j}] = \sum_{i,j} E [z_{i,j}] = \sum_{i,j} 1/n = k^2/n
+\end{equation}
+
+\noindent Lets compute the standard deviation of $Z$. Recall:
+$$\sigma^2[Z]  = E[Z-E[Z]]^2= E[Z^2] - E[Z]^2$$
+
+\noindent  We need the use the linearity of expectation again to compute $E[Z^2]$:
+\begin{eqnarray}
+E[Z^2] &=& E[(\sum_{i,j} z_{i,j})(\sum_{i',j'} z_{i',j'})] \\ 
+&=& \sum_{i=i',j=j'} E[z_{i,j}z_{i',j'}] \\
+& & + \sum_{i=i', j \ne j'} E[z_{i,j}z_{i',j'}] +\sum_{i \ne i', j = j'} E[z_{i,j}z_{i',j'}]  \\
+& & + \sum_{i \ne i', j \ne j'} E[z_{i,j}z_{i',j'}] \\
+& = & \frac{k^2}{n} + 0 + 0 + \frac{k^2(k-1)^2}{n(n-1)} 
+\end{eqnarray}
+Using the expression for variance $\sigma^2[Z] = \E[Z^2] - (\E[Z])^2$ we get:
+\begin{eqnarray}
+\sigma^2[Z] &=& \frac{k^2}{n} + \frac{k^2(k-1)^2}{n(n-1)} - \left(\frac{k^2}{n}\right)^2 \\
+&\le& \frac{k^2}{n}   \;\;\mbox{(for $k \le n$)}
+\end{eqnarray}
+
+\noindent  Now we invoke Chebyshev's inequality.
+\begin{equation}
+\Pr[|Z - \frac{k^2}{n}| > t] \le \frac{\sigma^2}{t^2} \le \frac{k^2}{nt^2}
+\end{equation}
+
+\noindent Choosing $t = 10k/\sqrt{n}$ we get that with probability at least $0.99$
+\begin{equation}
+|Z - \frac{k^2}{n}| \le 10k/\sqrt{n}
+\end{equation}
+Which gives:
+\begin{eqnarray}
+n &\le& \frac{k^2}{Z}(1+\frac{10\sqrt{n}}{k}) \\
+n &\ge& \frac{k^2}{Z}(1-\frac{10\sqrt{n}}{k})
+\end{eqnarray}
+
+
+\noindent This gives us the following procedure:
+First, sample $2$ groups of size $k \ge 50\sqrt{n}$ each.
+Count the number of collision $Z$.
+Estimate the size of the set as $n_{alg} = k^2/Z$.
+We are guarantied that with probability $0.99$ our estimate is within $20\%$ accuracy.
+\begin{equation}
+\frac{5}{6}n \le n_{alg} \le \frac{5}{4}n
+\end{equation}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%
