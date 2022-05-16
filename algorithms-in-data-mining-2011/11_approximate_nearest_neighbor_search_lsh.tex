@@ -1,27 +1,9 @@
 \documentclass{article}
-
-\usepackage{amsmath,amsfonts}
-\usepackage{amsthm, amssymb}
-
-\newtheorem{definition}{Definition}[section]
-\newtheorem{fact}{Fact}[section]
-\newtheorem{remark}{Remark}[section]
-\newtheorem{lemma}{Lemma}[section]
-\newcommand{\eps}{\varepsilon}
-\newcommand{\tab}{\hspace{.5cm}}
-\newcommand{\R}{\mathbb R}
-\newcommand{\N}{\mathcal N}
-\renewcommand{\S}{\mathcal S}
-\newcommand{\poly}{\operatorname{poly}}
-
-\title{Data mining: lecture 11} %
-\author{Edo liberty}
-\date{\nonumber}
+\usepackage{algorithms_in_data_mining}
 
 \begin{document} %
-\maketitle 
-\section{Nearest Neighbor search}
-\begin{definition}
+
+\lecture{11}{Nearest Neighbor search}{Edo Liberty}
 
 In the last class we discussed possible solutions for the nearest neighbor problem in low dimensions.
 The problem is defined below.
@@ -31,7 +13,7 @@ $X$ of size $O(n \poly(d))$ in time $O(n \poly(d))$ such that nearest neighbor q
 be performed in logarithmic time. In other words, given a search point $q$ a radius $r$ and $X$ one can 
 return an $x_i$ such the $||q - x_i || \le r$ or nothing if no such point exists.  The search for $x_i$ should
 require $O(\poly(d,\log(n)))$ time.
-\end{definition}
+
 As we have seen, this problem is hard when the dimension $d$ is large.
 It turns out that if we relax the problem a little bit, we can take a different tack at it.
 \begin{definition}

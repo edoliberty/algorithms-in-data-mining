@@ -1,24 +1,12 @@
 \documentclass{article}
+\usepackage{algorithms_in_data_mining}
 
-\usepackage{amsmath,amsfonts}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{fact}{Fact}[section]
-\newtheorem{lemma}{Lemma}[section]
-\newcommand{\eps}{\varepsilon}
-\newcommand{\tab}{\hspace{.5cm}}
-\newcommand{\R}{\mathbb R}
-
-
-
-\title{Data mining: lecture 5} %
-\author{Edo liberty}
-\date{\nonumber}
-
-
+%\newcommand{\tab}{\hspace{.5cm}}
 
 \begin{document} %
-\maketitle 
-\section*{Estimating the frequency moments}
+
+\lecture{5}{Estimating Frequency Moments}{Edo Liberty}
+
 Assume we have a stream $A$, of length $N$ which is composed of $m$ 
 different types of items $a_1,\ldots,a_m$ each of which repeats itself $n_1,\ldots,n_m$ times (in arbitrary order)
 We define the frequency moments $f_k$ as:
