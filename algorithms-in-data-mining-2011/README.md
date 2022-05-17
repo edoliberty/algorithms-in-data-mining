@@ -1,4 +1,4 @@
-## Data Mining 
+## Algorithms in Data Mining 
 
 Data Mining is concerned with efficiently extracting statistics,
 patterns, structures, or meanings from raw data. This task becomes
@@ -16,7 +16,7 @@ traditional data structures, at least on at introductory level. The
 class will attempt to be self contained nonetheless.
 
 
-## Class Details
+### Class Details
 
 The class takes place 9:00 to 12:00 in room 112 of the Dan David building. (We are no longer in Dan David 204)
 
@@ -33,7 +33,6 @@ The class takes place 9:00 to 12:00 in room 112 of the Dan David building. (We a
 
 
 ## Build
-Run 
 ```
 ./build.sh
 ```
