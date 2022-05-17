@@ -1,0 +1,388 @@
+\documentclass{article}
+\usepackage{algorithms_in_data_mining}
+
+\begin{document} %
+\lecture{13}{Algorithms in Data Mining - Exam Answers}{Edo Liberty}
+
+%\maketitle
+\section*{General Info}
+\begin{enumerate}
+\item Solve $3$ out of $4$ questions.
+\item Each correct answer is worth $33.3$ points.
+\item If you have solved more than three questions, please indicate which three you would like to be checked.
+\item The exam's duration is 3 hours. If you need more time please ask the attending professor.
+\item Good luck!
+\end{enumerate}
+
+
+\section*{Useful facts}
+\begin{enumerate}
+\item For any vector $x \in \R^{d}$ we define the $p$-norm of $x$ as
+follows:
+\[
+||x||_p = [\sum_{i=1}^{d}(x(i))^p]^{1/p}
+\]
+
+\item {\bf Markov's inequality:} For any {\it non-negative} random variable
+$X$:
+\[
+\Pr[X > t] \le E[X]/t.
+\]
+\item {\bf Chebyshev's inequality:} For any random variable $X$:
+\[
+\Pr[|X - E[X]| > t] \le \var[X]/t^2.
+\]
+\item {\bf Chernoff's inequality:} Let $x_1,\ldots,x_n$ be independent
+$\{0,1\}$ valued random variables. Each $x_i$ takes the value $1$
+with probability $p_i$ and $0$ else. Let $X = \sum_{i=1}^{n}x_i$ and
+let $\mu = E[X] = \sum_{i=1}^{n}p_i$. Then:
+\begin{eqnarray*}
+\Pr[X > (1+\eps)\mu] &\le& e^{-\mu \eps^2/4}\\
+\Pr[X < (1-\eps)\mu] &\le& e^{-\mu \eps^2/2}
+\end{eqnarray*}
+Or in a another convenient form:
+\[
+\Pr[|X - \mu| > \eps\mu] \le 2e^{-\mu \eps^2/4}
+\]
+%\item {\bf Hoeffding's inequality:} Let $x_1,\ldots,x_n$ be
+%independent random variables taking values in $\{+1,-1\}$ each with
+%probability $1/2$, then:
+%\[
+%\Pr[|\sum_{i=1}^{n}x_i a_i| > t] \le
+%2e^{-\frac{t^2}{\sum_{i=1}^{n}a_{i}^{2}}}.
+%\]
+%\item For any $x \ge 2$ we have:
+%\[
+%e^{-1} \ge (1-\frac{1}{x})^{x} \ge \frac{2}{3}e^{-1}
+%\]
+\item A probability distribution $\psi$ of $z$ is such that:
+\[
+\forall \; c_1,c_2 \in \R \;\; \Pr[c_1 \le z \le c_2]  = \int_{c_1}^{c_2}\psi(t)dt
+\]
+
+\item For a continuous variable $z$ we have that:
+\[%\begin{eqnarray*)
+\E[z] = \int_{-\infty}^{\infty} f(t)\psi(t)dt \;\;\;\;\;
+\Var[z] = \int_{-\infty}^{\infty} f^2(t)\psi(t)dt - (\E[z])^2
+\]%\end{eqnarray*}
+
+\end{enumerate}
+
+\pagebreak
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Probabilistic inequalities}
+\subsection*{setup}
+In this question you will be asked to derive the three most used
+probabilistic inequalities for a specific random variable. Let
+$x_1,\ldots,x_n$ be independent $\{-1,1\}$ valued random variables.
+Each $x_i$ takes the value $1$ with probability $1/2$ and $-1$ else.
+Let $X = \sum_{i=1}^{n}x_i$.
+
+\subsection*{questions}
+\begin{enumerate}
+\item Let the random variable $Y$ be defined as $Y = |X|$.
+Prove that Markov's inequality holds for $Y$. Hint: note that $Y$
+takes integer values. Also, there is no need to compute $\Pr[Y =
+i]$.
+\item Prove Chebyshev's inequality for the above random variable
+$X$. You can use the fact that Markov's inequality holds for any
+positive variable regardless of your success (or lack of if) in the
+previous question. Hint: $\var[X] = E[(X-E[X])^2]$.
+\item Argue that
+\[
+\Pr[X > a] = \Pr[\Pi_{i=1}^{n}e^{\lambda x_i} > e^{\lambda a}] \le
+\frac{E[\Pi_{i=1}^{n}e^{\lambda x_i}]}{e^{\lambda a}}
+\]
+for any $\lambda \in [0,1]$. Explain each transition.
+\item Argue that:
+\[
+\frac{E[\Pi_{i=1}^{n}e^{\lambda x_i}]}{e^{\lambda a}} =
+\frac{\Pi_{i=1}^{n}E[e^{\lambda x_i}]}{e^{\lambda a}} =
+\frac{(E[e^{\lambda x_1}])^n}{e^{\lambda a}}
+\]
+What properties of the random variables $x_i$ did you use in each
+transition?
+\item Conclude that $\Pr[X > a] \le e^{-\frac{a^2}{2n}}$ by
+showing that:
+\[
+\exists \;\;\lambda\in [0,1] \;\;s.t. \;\; \frac{(E[e^{\lambda
+x_1}])^n}{e^{\lambda a}} \le e^{-\frac{a^2}{2n}}
+\]
+Hint: For the hyperbolic cosine function we have $\cosh(x) =
+\frac{1}{2}(e^{x} + e^{-x}) \le e^{x^2/2}$ for $x \in [0,1]$.
+\end{enumerate}
+\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\subsection*{answers}
+\begin{enumerate}
+\item 
+\begin{eqnarray*}
+E[Y] &=& \sum_{i=0}^{n}\Pr[Y=i]\cdot i\\
+&=& \sum_{i=0}^{t}\Pr[Y=i]\cdot i + \sum_{i=t+1}^{n}\Pr[Y=i]\cdot i\\
+&\ge& \sum_{i=t+1}^{n}\Pr[Y=i]\cdot i \\
+&\ge& \sum_{i=t+1}^{n}\Pr[Y=i]\cdot t \\
+&=& t\cdot\Pr[Y > t]
+\end{eqnarray*}
+Therefore, $E[Y] \ge t\cdot\Pr[Y > t]$ which is Markov's inequality.
+\item This is identical to the general proof of Chebyshev's inequality.
+We define $Z = (X - E[X])^2$. Since $Z$ is positive we can use Markov's inequality for it and get:
+\[
+\Pr[|X - E[X]| > t] = \Pr[Z > t^2] \le \frac{E[Z]}{t^2} = \frac{\var[X]}{t^2} 
+\]
+Here we used that $E[Z] = E[(X - E[X])^2] = \var[X]$.
+\item First transition:
+\[
+\Pr[X > a] = \Pr[\lambda X > \lambda a] = \Pr[e^{\lambda X} > e^{\lambda a}] = \Pr[e^{\lambda \sum x_i} > e^{\lambda a}] = \Pr[\Pi_{i=1}^{n}e^{\lambda x_i} > e^{\lambda a}]
+\]
+These hold due to the monotonicity of multiplication by a positive constant and exponentiation.
+Now, using Markov's inequality on the last inequality we get:
+\[
+\Pr[\Pi_{i=1}^{n}e^{\lambda x_i} > e^{\lambda a}] \le \frac{E[\Pi_{i=1}^{n}e^{\lambda x_i}]}{e^{\lambda a}} 
+\]
+\item The first transition is true due to the independence of the variables $x_i$. This means that $e^{\lambda x_i}$ are independent.
+The second transition is due to all expectations of $e^{\lambda x_i}$ being equal which stems from $x_i$ being identically distributed.
+\item First, we compute the expectation of $e^{\lambda x_i}$ 
+\[
+E[e^{\lambda x_i}] = \frac{1}{2}e^{\lambda} + \frac{1}{2}e^{-\lambda} = \cosh(\lambda) \le e^{\lambda^2/2}
+\]
+From the above we have that $\Pr[X > a] \le e^{n\lambda^2/2  - \lambda a}$. Setting $\lambda = a/n$ we get 
+$e^{n\lambda^2/2  - \lambda a} = e^{-\frac{a^2}{2n}}$ which concludes the proof.
+\end{enumerate}
+\pagebreak
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Integrating blackbox functions}
+\subsection*{setup}
+Here, we will try to write an algorithm for approximately integrating blackbox functions.
+Given a function $f$, the algorithm must produce an approximation for the integral of $f$ over a given range $[a,b]$.
+Alas, while it can evaluate $f(t)$ for any value of $t$, it does not have any notion of the inner workings of $f$. 
+More precisely, the algorithm is given a range $[a,b] \in \R$ two parameters $\eps, \delta > 0$ and a function $f$.
+It is required to produce a value $A = ALG(f,a,b,\eps,\delta)$ such that with probability at least $1 -\delta$:
+\[
+ (1-\eps) \int_{a}^{b} f(t)dt \le A \le  (1+\eps) \int_{a}^{b} f(t)dt \ . 
+\]
+To make things simpler, the function $f$ is bounded both from below and from above, $\forall \; x \; 1 \le f(x) \le 2$.
+The questions will lead you through constructing this algorithm.
+
+\subsection*{questions}
+\begin{enumerate}
+\item Consider the variable $x$ taking values uniformly at random over the range $[a,b]$.
+Write the equation for the probability distribution function $\psi$ of $x$. 
+\item Prove that $\int_{a}^{b}f(t)dt = (b-a)\E[f(x)]$.
+\item Show that $\var[f(x)] \le 3 (\E[f(x)])^2$. Hint: remember that $f(x) \in [1,2]$.
+\item For an integer $s$, define $Y = \frac{1}{s}\sum_{i=1}^{s}f(x_i)$ where $x_i$ are all chosen uniformly and i.i.d. from $[a,b]$.
+Compute $\E[Y]$ and show that $\var[Y] \le 3 (\E[Y])^2 /s$.
+\item Compute a value for $s$ which guaranties that 
+\[
+\Pr[ |Y -  \E[Y] | \ge \eps \E[Y]] \le \delta \ .
+\]
+Describe the resulting algorithm $ALG(f,a,b,\eps,\delta)$ and argue that it meets the required conditions.
+\end{enumerate}
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection*{answers}
+\begin{enumerate}
+\item The function $\phi(x)$ is a piecewise constant function. $\phi(x) = 1/(b-a)$ for $a \le x \le b$ and zero else. 
+\item To show this we simply compute the expectation of $f(x)$:
+$$ \E[f(x)] = \int_{-\infty}^{\infty} f(t) \psi(t)dt = \int_{a}^{b} f(t) \frac{1}{b-a}dt $$
+which gives $ \int_{a}^{b} f(t) dt = (b-a)\E[f(x)]$
+\item We compute the variance of $f(x)$.
+$$ \Var[f(x)] =  \int_{-\infty}^{\infty} f^{2}(t)\psi(t)dt - (\E[f(x)])^2 \le \int_{a}^{b} 4 \frac{1}{b-a}dt - (\E[f(x)])^2 = 4- (\E[f(x)])^2$$
+Now, since $f(x) \in [1,2]$ we also have that $\E[f(x)] \ge 1$. This means that $4 \le 4(\E[f(x)])^2$ and gives that $\Var[f(x)] \le 3(\E[f(x)])^2$.
+\item First, from linearity of expectation and the fact that $x_i$ are i.i.d. we have that:
+$$\E[Y] = \E[\frac{1}{s}\sum_{i=1}^{s}f(x_i)] = \frac{1}{s}\sum_{i=1}^{s}\E[f(x_i)] = \frac{1}{s}\sum_{i=1}^{s}\E[f(x)] = \E[f(x)] \ .$$
+Since $x_i$ are independante we have that the variance of the sum is the sum of variances.
+$$\Var[Y] = \frac{1}{s^2}\sum_{i=1}^{s} \Var[f(x_i)] \le \frac{1}{s^2}\sum_{i=1}^{s} 3(\E[Y])^2 = 3(\E[Y])^2/s \ .$$
+\item Using Chebyshev's inequality we that that 
+$$ \Pr[ |Y - \E[Y]| \ge \eps\E[Y] ] \le \frac{\Var[Y]}{(\eps\E[Y])^2} \le \frac{3}{\eps^2 s} \ . $$
+The condition that $\frac{3}{\eps^2 s} \le \delta$ is met by $s \ge 3/\eps^2\delta$.
+%
+The resulting algorithm $ALG(f,a,b,\eps,\delta)$ is trivial. 
+Sample $s = 3/\eps^2\delta$ different values 
+$x_1, \ldots, x_s$ uniformly at random from the interval $[a,b]$ and evaluate $f(x_i)$ for each.
+Return the average of the evaluations $Y = \frac{1}{s}\sum_{i=1}^{s}f(x_i)$.
+
+\end{enumerate}
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{Matrix Sampling}
+\subsection*{setup}
+Consider an $m \times n$, $\{1,-1\}$ matrix $A$. More formally, $A \in \R^{m\times n}$ and $\forall \;i \in [m], j\in[n] \; A_{i,j} \in \{1,-1\}$.
+In this question we will try to compute an approximation for $AA^T$ efficiently by sampling columns from $A$.
+Define $n$ i.i.d. random variables $q_1,\ldots,q_n$ such that:
+\begin{equation*}
+q_i = \left\{ 
+\begin{array}{rl}
+1/\sqrt{p} & \mbox{\; w.p. \;} p \\
+0 &\mbox{ otherwise}
+\end{array} 
+\right.
+\end{equation*}
+for some fixed value $p \in [0,1]$.
+The sampled matrix $B$ is such that $B_{i,j} = A_{i,j}q_j$
+
+
+
+
+
+
+
+\subsection*{questions}
+\begin{enumerate}
+\item What is the expected number of non zero entries in the matrix $B$?
+\item Let $A_{i}$ denote the $i$'th row of $A$ and similarly $B_{i}$. Argue that $$\E[\langle B_{i_1}, B_{i_2} \rangle] =  \langle A_{i_1}, A_{i_2} \rangle \ . $$
+\item Use Chernoff's inequality to bound from above the following probability:
+\[
+\Pr[ | \langle B_{i_1}, B_{i_1} \rangle - \langle A_{i_1}, A_{i_1} \rangle | \ge \eps n ]
+\]
+for a fixed $\eps \in [0,1]$. Note that $\langle A_{i_1}, A_{i_1} \rangle = n$.
+\item Bound from above the following probability:
+\[
+\Pr[ | \langle B_{i_1}, B_{i_2} \rangle - \langle A_{i_1}, A_{i_2} \rangle | \ge \eps n ] 
+\]
+Hint: it is convenient to consider the sets $ J^{+} = \{ j \;| \;A_{i_1,j} A_{i_2,j} = 1\}$ \\and $ J^{-} = \{ j \;| \;A_{i_1,j} A_{i_2,j} = -1\}$
+and setting $n^{+} = |J^{+}|$ and $n^{-} = |J^{-}|$.
+
+\item Using the union bound, compute a value for $p$ which guaranties that with probability at least $1-\delta$ we have that:
+$$ \forall \;\;  i_1,i_2 \in [m] \;\;   |(BB^T)_{i_1,i_2}  - (AA^T)_{i_1,i_2}| \le \eps n \ . $$
+\end{enumerate}
+\pagebreak
+
+
+\subsection*{answers}
+\begin{enumerate}
+\item The expected number of non zero variables $q_i$ is $np$. Since for each of those there are $m$ non zeros in $B$ the answer is $mnp$.
+\item Here we compute the expectation 
+\begin{eqnarray*}
+\E[\langle B_{i_1}, B_{i_2} \rangle] &=& \E[\sum_{j=1}^{n} B_{i_1}(j) B_{i_2}(j) ] = \E[\sum_{j=1}^{n} A_{i_1}(j) A_{i_2}(j) q_j^2 ]  \\
+&=& \sum_{j=1}^{n} A_{i_1}(j) A_{i_2}(j) \E[q_j^2 ] = \sum_{j=1}^{n} A_{i_1}(j) A_{i_2}(j) \\ 
+&=& \langle A_{i_1}, A_{i_2} \rangle 
+\end{eqnarray*}
+\item Note that $\langle B_{i_1}, B_{i_1} \rangle = \sum_{j=1}^{n} A_{i_1}(j) A_{i_1}(j) q_j^2 = \frac{1}{p}\sum_{j=1}^{n}b_i$ where $b_i = 1$ w.p. $p$ and zero else. 
+\[
+\Pr[ | \frac{1}{p}\sum_{j=1}^{n}b_i - n | \ge \eps n ] = \Pr[ | \sum_{j=1}^{n}b_i - pn | \ge p\eps n ]
+\]
+Since $b_i$ are independent indicator variables we use Chernoff's bound.
+\[
+\Pr[ | \sum_{j=1}^{n}b_i - pn | \ge \eps pn ] \le 2e^{-\frac{pn\eps^2}{4}}
+\]
+\item Consider the sets $ J^{+} = \{ j \;| \;A_{i_1,j} A_{i_2,j} = 1\}$ and $ J^{-} = \{ j \;| \;A_{i_1,j} A_{i_2,j} = -1\}$. 
+We have that:
+$$\langle B_{i_1}, B_{i_2} \rangle = \sum_{j \in J^+} q^2_j - \sum_{j \in J^-} q^2_j$$
+Moreover, setting $n^{+} = |J^{+}|$ and $n^{-} = |J^{-}|$ we have $\langle A_{i_1}, A_{i_2} \rangle = n^{+}  - n^{-}$.
+Therefore, 
+$$\langle B_{i_1}, B_{i_2} \rangle - \langle A_{i_1}, A_{i_2} \rangle = (\sum_{j \in J^+} q^2_j - n^{+})  - (\sum_{j \in J^-} q^2_j  - n^{-})$$
+Thus, to have that $|\langle B_{i_1}, B_{i_2} \rangle - \langle A_{i_1}, A_{i_2} \rangle| \le \eps n$ it suffices to have 
+$|\sum_{j \in J^+} q^2_j - n^{+}| \le \eps n/2$ and $|\sum_{j \in J^-} q^2_j - n^{-}| \le \eps n/2$.
+For each one of the above we can apply the Chernoff bound as above.
+$$\Pr [|\sum_{j \in J^+} q^2_j - n^{+}| \ge \eps n/2] = \Pr [|\sum_{j=1}^{n^{+}} b_j - n^{+}p | \ge \eps  np/2] \le 2e^{-\frac{(\eps  np/2)^2}{4n^{+}p}} \le 2e^{-\frac{\eps^2np}{16}}$$
+which uses the fact that $n^{+} \le n$.
+Repeating the same exercise for $n^-$ and using the Union bound we gets: 
+\[
+\Pr[ | \langle B_{i_1}, B_{i_2} \rangle - \langle A_{i_1}, A_{i_2} \rangle | \ge \eps n ] \le 4 e^{-\frac{\eps^2np}{16}}
+\]
+
+\item Using the union bound on all ${m \choose 2} \le m^2$ options of choosing $i_1$ and $i_2$ we require that: 
+$$ m^2   4 e^{-\frac{\eps^2np}{16}} \le \delta \ . $$
+This is satisfied by $p \ge \frac{16}{4\eps^2}\log(\frac{4m^2}{\delta})$
+\end{enumerate}
+\pagebreak
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{2-Means Clustering}
+\subsection*{setup}
+You are given $n$ points $x_1\ldots,x_n \in \R^d$ which naturally fall into two clusters.
+There exist two points $y_1,y_2 \in \R^d$ such that the distance between $y_1$ and $y_2$ is $\ell$ (that is $\|y_1 - y_2\|_2 = \ell$). 
+There are $n/2$ points around $y_1$ such that $\|x_i - y_1\|_2 \le 1$. 
+The other $n/2$ points are around $y_2$ and $\|x_i - y_2\|_2 \le 1$.
+Note that the points $y_1$ and $y_2$ are not known to you.
+Reminder: the cost of $k$-means clustering is $\min_{c_1,\ldots,c_k \in \R^d} \sum_{i=1}^{n}\min_{j \in [k]} \|x_i - c_j\|^2$.
+\subsection*{questions}
+\begin{enumerate}
+\item What is the cost of $2$-means clustering when the two chosen cluster centers are $c_1 = y_1$ and $c_2=y_2$?
+\item Argue that if we pick as centers $c_1,c_2$ two points, one from each cluster, then the cost is at most $4n$.
+\item Argue that if we pick as centers $c_1,c_2$ two points from the same cluster then the cost is at least $n/2(\ell -2)^2$.
+\item Assume that $\ell > 5$. Describe an algorithm for finding a clustering assignment whose cost is at most $4n$ with probability at least $1- \delta$.
+Your algorithm's running time dependence on the number of points $n$ must be linear.
+\item Given the algorithm in the previous question, describe an algorithm for finding the {\it optimal cluster centers} with probability $1-\delta$
+and prove its correctness. (note: you are not asked to recover $y_1$ and $y_2$)
+\end{enumerate}
+\pagebreak
+
+\subsection*{answers}
+\begin{enumerate}
+\item Each point $x_i$ is of distance $1$ from its center so the total cost is $n$.
+\item Each point in the data is in the same ball (of radius $1$) with either $c_1$ or $c_2$. 
+Say $x_i$ is in the same cluster as $c_1$.
+From the triangle inequality, we get that 
+$\|x_i -c_1\| \le \|x_i -y_1\| + \|y_i -c_1\|  \le 2$. Thus,  $\|x_i -c_1\|^4 \le 4$. 
+Summing over all points we get that the total cost is at most $4n$.
+\item If both $c_1$ and $c_2$ are in the same cluster than all the $n/2$ points on the other cluster (the one without centers) are
+at distance at least $\ell-2$ from either $c_1$ or $c_2$. Summing over their costs we get $n/2(\ell -2)^2$.
+
+\item Since $\ell > 5$ we have that $n/2(\ell -2)^2 \ge 4n$. 
+This means that any clustering whose centers are split is better than any clustering whose centers are not split. 
+Note that is we pick two points at random from the data as centers $c_1$ and $c_2$ with probability $1/2$ we pick them such that they are split.
+Moreover, after we pick centers we can compute the k-means cost and make sure that the cost is at most $4n$.
+If we fail, we can repeat this process until we succeed. 
+It is easy to see that after at most $\log(1/\delta)$ we succeed in one of the rounds with probability at least $1-\delta$.
+
+\item First we describe the algorithm and then prove its correctness.
+We perform the previous procedure and obtain two cluster centers $c_1$ and $c_2$.
+Then we set $s_1$ and $s_2$ to be the sets of points whose closest center is $c_1$ and $c_2$ respectively. 
+The algorithm returns $c^{*}_1 = \frac{2}{n} \sum_{i \in s_1} x_i$ and similarly $c^{*}_2 = \frac{2}{n} \sum_{i \in s_2} x_i$
+In other words, the algorithm performs one iteration of Lloyd's algorithm initialized at centers $c_1,c_2$.
+
+The correctness stems from the following facts. First, the clusters $s_1$ and $s_2$ are optimal.
+This is because $s_1$ contains the $n/2$ points of distance at most $1$ to $y_1$ and $s_2$ all the rest.
+It can be verified that no other clustering is better. Assume by contradiction that such a clustering exists.
+Note that it can be improved by moving one of the points between the clusters which contradicts optimality.
+Second, the optimal placement of centers for a given set of points is at their average. This was shown in class.
+
+\end{enumerate}
+\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
