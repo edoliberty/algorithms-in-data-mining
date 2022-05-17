@@ -1,4 +1,4 @@
-## Data Mining
+## Algorithms in Data Mining
 Data Mining is concerned with efficiently extracting statistics,
 patterns, structures, or meanings from raw data. This task becomes
 hard when the amount of data is large, which is often the case in
@@ -16,16 +16,22 @@ basic combinatorics, linear algebra, basic complexity theory, and
 traditional data structures, at least at an introductory level. The
 class will attempt to be self contained nonetheless.
 	
-## Class Details
+### Class Details
 The class takes place 17:00 to 20:00 every monday.
 
-## Undergraduate students:
+### Undergraduate students:
 * Final exam (50% of the grade).
 * Home assignments (50% of the grade).
 * A project (for extra credit) is optional for students who are interested.
 	
-## Master and PhD students:
+### Master and PhD students:
 	
 * No final exam.
 * Home assignments (50% of the grade).
 * Final project (50% of the grade). Should require roughly aweek's worth of work, comparable to learning for and taking the final exam. These project can contain both theoretical and experimental elements.
+
+
+## Build
+```
+./build.sh
+```
