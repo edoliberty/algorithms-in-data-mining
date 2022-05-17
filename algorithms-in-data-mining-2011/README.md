@@ -1,6 +1,6 @@
 ## Data Mining 
 
-is concerned with efficiently extracting statistics,
+Data Mining is concerned with efficiently extracting statistics,
 patterns, structures, or meanings from raw data. This task becomes
 hard when the amount of data is large, which is often the case in
 modern data sets. This course will survey modern algorithms, concepts,
