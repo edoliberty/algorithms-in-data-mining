@@ -1,0 +1,245 @@
+\documentclass{article}
+\usepackage{algorithms_in_data_mining}
+\begin{document} %
+\lecture{13}{Algorithms in Data Mining - Exam}{Edo Liberty}
+
+
+\section*{General Info}
+\begin{enumerate}
+\item Solve $3$ out of $4$ questions.
+\item Each correct answer is worth $35$ points and each question part is worth $7$ points.
+\item Since the maximal grade is $105$, grades will potentially be rounded down to $100$.
+\item If you solved more than three questions, please indicate which three you would like to be checked.
+\item The exam's duration is 3 hours. If you need more time please ask the attending professor.
+\item Good luck!
+\end{enumerate}
+
+
+\section*{Useful facts}
+\begin{enumerate}
+\item For any vector $x \in \R^{d}$ we define the $p$-norm of $x$ as
+follows:
+\[
+||x||_p = [\sum_{i=1}^{d}(x(i))^p]^{1/p}
+\]
+
+\item {\bf Markov's inequality:} For any {\it non-negative} random variable
+$X$:
+\[
+\Pr[X > t] \le E[X]/t.
+\]
+\item {\bf Chebyshev's inequality:} For any random variable $X$:
+\[
+\Pr[|X - E[X]| > t] \le \var[X]/t^2.
+\]
+\item {\bf Chernoff's inequality:} Let $x_1,\ldots,x_n$ be independent
+$\{0,1\}$ valued random variables. Each $x_i$ takes the value $1$
+with probability $p_i$ and $0$ else. Let $X = \sum_{i=1}^{n}x_i$ and
+let $\mu = E[X] = \sum_{i=1}^{n}p_i$. Then:
+\[
+\Pr[|X - \mu| > \eps\mu] \le 2e^{-\mu \eps^2/4}
+\]
+
+\item For $z \in [0,1]$ we have $e^z < 1 + z + z^2$ and that $1+z^2 < e^{z^2}$
+
+
+
+%\item For an arithmetic progression we have $\sum_{i=1}^{n} i = n(n+1)/2$.
+%\item For a squared arithmetic progression we have $\sum_{i=1}^{n} i^2 = n(n+1)(2n+1)/6$.
+%\item For a geometric progression we have $\sum_{i=1}^{n} r^i = (1-r^n)/(1-r)$.
+
+\end{enumerate}
+
+\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Probabilistic inequalities}
+\subsection*{setup}
+In this question you will be asked to derive a version of the Chernoff bound for sums of independent mean zero random variables.
+Let $X_1,\ldots,X_n$ be a independent random variables such that 
+\[
+|X_i| \le R \mbox{\;\;and\;\;} \E[X_i] = 0 \mbox{\;\;and\;\;} \E[X_i^2] = \sigma^2_i
+\]
+Let $\sigma^2 = \sum_{i=1}^{n}\sigma^2_i$ and $X = \sum_{i=1}^{n}X_i$.
+
+\subsection*{questions}
+\begin{enumerate}
+\item Prove that $\E[X] = 0$ and that $\E[X^2] = \sigma^2$
+\item Argue that for any positive parameter $\lambda >  0$ we have:
+\[
+\Pr[X > t] \le \frac{\Pi_{i=1}^{n}\E[e^{\lambda X_i}]}{e^{\lambda t}}
+\]
+Explain each step in the derivation and indicate what properties of the random variables $X_i$ are used.
+
+\item Argue that for any $\lambda \in (0,1/R]$
+\[
+\E[e^{\lambda X_i}] \le e^{\lambda^2\sigma_i^2}
+\]
+Explain each step in the derivation and indicate what properties of the random variables $X_i$ are used.
+{\bf Hint:} you should use the fact that for any $z \le 1$ we have $e^z < 1 + z + z^2$ and that $1+z^2 < e^{z^2}$.
+\item Conclude that for $\lambda = \min\{t/2\sigma^2, 1/R\}$ we obtain:
+
+\begin{eqnarray}
+\Pr[X > t] &\le& e^{-t^2/4\sigma^2} \mbox{\;\;if\;\;} t \le  2\sigma^2/R \\
+\Pr[X > t] &\le& e^{-t/2R } \mbox{\;\;if\;\;} t \ge 2\sigma^2/R
+\end{eqnarray}
+
+\item Let $Z_1,\ldots,Z_n$ be random indicator variables such that $Z_i = 1$ with probability $p_i$ and $Z_i = 0$ else.
+Let $Z = \sum_{i=1}^{n} Z_i$ and $\mu = \E[Z] = \sum_{i=1}^{n}p_i$. Using the above, conclude that for $\eps \in [0,1]$:
+\[
+\Pr[Z - \mu > \eps \mu] \le e^{-\mu \eps^2 / 4} 
+\]
+{\bf Hint:} notice that you cannot apply the above directly because $\E[Z_i] = p_i \ne 0$. However the fact that $\E[Z_i - p_i] = 0$ might assist you.
+
+
+\end{enumerate}
+\pagebreak
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Approximate item frequencies}
+\subsection*{setup}
+We are given a stream of $n$ integers $a_1,\ldots,a_n \in [m]$. We define the frequency of item $i$ to be the number of times $i$ appeared in the stream.
+That is, $f_i = \sum_{j \in [n]} 1_{a_j == i}$. Assume we also hold an array $b$ of $\ell$ counters, initially set to zero. 
+Finally we assume a perfect hash function $h:[m]\rightarrow[\ell]$. The question will discuss the result of the following algorithm.
+\begin{algorithm}[h!]
+\begin{algorithmic}
+\STATE $b \leftarrow$ empty counters array of size $\ell$ initialized to $0$.
+\STATE $h \leftarrow$ perfect hash function from $1,\ldots,m$ to $1,\ldots,\ell$.
+\FOR{$i \in a_1,\ldots,a_n$}
+\STATE $b[h(i)] \leftarrow b[h(i)] + 1$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\noindent Particularly, we will examine the relation between $f_i$ and $b[h(i)]$.
+Throughout the question we will denote by 
+$h^{-1}(i)$ the set of indexes that collide with $i$ using the hash function $h$, namely, $h^{-1}(i) = \{j | h(i)=h(j)\} \setminus \{i\} $.
+\subsection*{questions}
+\begin{enumerate}
+\item What is the probability that $j \in h^{-1}(i)$ for $j \ne i$.
+\item Show that by the end of the stream $b[h(i)] = f_i + \sum_{j \in h^{-1}(i)} f_j$.
+\item Show that $\E[b[h(i)]] = f_i + (n-f_i)/\ell$.
+\item Show that $\Var[b[h(i)]] \le \sum_{j \in [m]} f^2_j/\ell$.
+\item Use Chebyshev's inequality and your results for 3 and 4 to find a value of $\ell$ such that 
+\[
+\Pr[ b[h(i)] > f_i + \eps n] \le \delta
+\]
+It might help to notice that $n = \sum_{i \in [m]} f_i \ge \sqrt{\sum_{i \in [m]} f^2_i}$.
+\end{enumerate}
+\pagebreak
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{Approximate median}
+\subsection*{setup}
+Given a list $A$ of $n$ numbers $a_1,\ldots,a_n$, we define the rank
+of an element $r(a_i)$ as the number of elements that are smaller
+than it. For example, the smallest number has rank zero and the
+largest has rank $n-1$. Equal elements are ordered arbitrarily. The
+median of $A$ is an element $a$ such that $r(a) = n/2$. 
+An $\alpha$-approximate-median is a number $a$
+such that:
+\[
+n(1/2 - \alpha) \le r(a) \le n(1/2 + \alpha)
+\]
+In this question we sample $k$ elements uniformly at random {\it
+with replacement} from the list $A$. Let the samples be
+$\{x_1,\ldots,x_k\} = X$. You will be asked to show that the median of
+$X$ is an $\alpha$-approximate-median of $A$ for some value of $k$.
+
+\subsection*{questions}
+\begin{enumerate}
+\item What is the probability the a randomly chosen element $x$ is
+such that:
+\[
+r(x) > n(1/2 + \alpha)
+\]
+\item Let us define $X_{>\alpha}$ as the set of samples whose rank
+is greater than $n(1/2 + \alpha)$. More precisely, $X_{>\alpha} =
+\{x_i \in X | r(x_i) > n(1/2 + \alpha)\}$. Similarly we define
+$X_{<\alpha} = \{x_i \in X | r(x_i) < n(1/2 - \alpha)\}$. Prove that
+if $|X_{>\alpha}| < k/2$ and $|X_{<\alpha}| < k/2$ then the median
+of $X$ is an $\alpha$-approximate-median of $A$.
+\item Let $Z = |X_{>\alpha}|$. Find $t$ for which:
+\[
+\Pr[Z \ge k/2] = \Pr[Z \ge (1+t)E[Z]]
+\]
+(Hint: this is only an auxiliary step that is supposed to help you relate $k/2$ and $\E[Z]$ in a form similar to Chernoff's bound)
+\item Bound from above the probability that $Z \ge k/2$ as tightly
+as possible. If you do so using a probabilistic inequality, justify
+your choice.
+\item What value of $k$ will guarantee that $|X_{>\alpha}| < k/2$ {\bf and} $|X_{<\alpha}| < k/2$ simultaneously with
+probability at least $1-\delta$?
+\end{enumerate}
+\pagebreak
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{k-means clustering with equal cluster sizes}
+\subsection*{setup}
+You are given $n$ vectors $X = \{x_1,\ldots,x_n\} $ and $x_i \in \R^{d}$. 
+The k-means cost function for $X$ and a set of $k$ centers $M = \{\mu_1,\ldots,\mu_k\}$ is defined as:
+\[
+f(X, M) = \sum_{i=1}^{n} \min_j \|x_i - \mu_j\|^2 = \sum_{j=1}^{k} \sum_{i \in S_j} \|x_i - \mu_j\|^2
+\]
+where $i \in S_j$  if the center closest to $x_i$ is $\mu_j$.
+From here on, we will denote by $\OPT(X,k)$ the lowest possible value of $f$ using $k$ clusters for the points $X$.
+Namely, $\OPT(X,k) = f(X,M^*)$ where $M^{*} =  \arg\min_{|M|=k} f(X,M)$. % are the centers picked by the optimal solution.
+%
+Moreover, we denote by $\ALG(X,k)$ the cost of $f(X,M)$ where each center $\mu_j$ is picked uniformly at random (with replacement) from $X$.
+In other words, for every $i$ and $j$ we have $\Pr[\mu_j = x_i] = 1/n$. Note that $\ALG(X,k)$ is a random variable which depends on the choice of centers.
+
+To make things simpler, we assume that the best solution is obtained with equal cluster sizes . That it $|S^{*}_j| = n/k$ for all $j$ and $n/k$ is an integer.
+\subsection*{questions}
+\begin{enumerate}
+\item We start with the case of $k=1$. That is, there is only one center. In this case the optimal center has a closed form solution which is $\mu^{*}_1 = \frac{1}{n}\sum_{i=1}^{n}x_i$.
+Show that
+\[
+\OPT(X,1) = \sum_{i=1}^{n}x_i^{T}x_i - \frac{1}{n}\sum_{i=1}^{n}\sum_{j=1}^{n}x_i^{T}x_j
+\]
+\item Compute $\E[ALG(X,1)]$. Show that $\E[ALG(X,1)] = 2 \OPT(X,1)$.
+\item We now turn to the more interesting case where $k>1$. 
+Define $E_{cover}$ to be the event that the algorithm picks exactly one point from each optimal cluster $S^{*}_{j}$.
+Show that $\Pr(E_{cover}) \ge e^{-k}$.
+{\bf Hint:} you might find Stirling's formula useful: $\log(k!) = k\log(k) - k + O(\log(k))$.
+\item Argue that given that $E_{cover}$ happens the expected cost of the algorithm is low. That is 
+$$\E[\ALG(X,k) | E_{cover}] \le 2\OPT(X,k).$$
+\item Given the observation above, describe an algorithm whose running time is $O(e^{k}\log(1/\delta)dkn)$ that produced 
+a set of centers $M$ such that $f(X,M) \le 4\OPT(X,k)$ with probability at least $1-\delta$.
+\end{enumerate}
+\pagebreak
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
