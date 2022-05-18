@@ -1,8 +1,4 @@
-rm *.aux
-rm *.bbl
-rm *.blg
-rm *.dvi
-rm *.log
+rm *.aux *.bbl *.blg *.dvi *.log
 
 for FILE in *.tex; do 
 	pdflatex $FILE; 
@@ -10,3 +6,5 @@ for FILE in *.tex; do
 	pdflatex $FILE; 
 	pdflatex $FILE; 
 done
+
+rm *.aux *.bbl *.blg *.dvi *.log
