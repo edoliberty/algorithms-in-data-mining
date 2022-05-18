@@ -25,6 +25,9 @@ You should submit one PDF document containing your project motivation, backgroun
 The deadline for project submission is May 19th 2013
 
 ## Build
+On unix like systems with the bibtex and pdflatex availble you should be able to do this:
 ```
+git clone git@github.com:edoliberty/algorithms-in-data-mining.git
+cd algorithms-in-data-mining/algorithms-in-data-mining-2013 
 ./build
 ```

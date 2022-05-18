@@ -33,6 +33,9 @@ The class takes place 9:00 to 12:00 in room 112 of the Dan David building. (We a
 
 
 ## Build
+On unix like systems with the bibtex and pdflatex availble you should be able to do this:
 ```
-./build.sh
+git clone git@github.com:edoliberty/algorithms-in-data-mining.git
+cd algorithms-in-data-mining/algorithms-in-data-mining-2013 
+./build
 ```

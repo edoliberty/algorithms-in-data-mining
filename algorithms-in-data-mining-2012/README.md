@@ -30,8 +30,10 @@ The class takes place 17:00 to 20:00 every monday.
 * Home assignments (50% of the grade).
 * Final project (50% of the grade). Should require roughly aweek's worth of work, comparable to learning for and taking the final exam. These project can contain both theoretical and experimental elements.
 
-
 ## Build
+On unix like systems with the bibtex and pdflatex availble you should be able to do this:
 ```
-./build.sh
+git clone git@github.com:edoliberty/algorithms-in-data-mining.git
+cd algorithms-in-data-mining/algorithms-in-data-mining-2012
+./build
 ```
