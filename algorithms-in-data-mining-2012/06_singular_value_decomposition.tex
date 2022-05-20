@@ -16,7 +16,7 @@ A &=& \sum_{\ell=1}^{m} \sigma_{\ell} u_{\ell} v_{\ell}^{T}\\
 To prove this consider the matrix $AA^{T} \in \R^{m\times m}$.
 Set $u_\ell$ to be the $\ell$'th eigenvector of $AA^{T}$.
 By definition we have that $AA^{T}u_\ell = \lambda_\ell u_\ell$.
-Since $AA^{T}$ is positive semidefinite we have $\lambda_\ell \ge 0$.
+Since $AA^{T}$ is positive semi-definite we have $\lambda_\ell \ge 0$.
 Since $AA^{T}$ is symmetric we have that $\forall \;\; \ell, \ell' \;  \langle u_{\ell}, u_{\ell'} \rangle = \delta(\ell,\ell')$.
 Set $\sigma_\ell = \sqrt{\lambda_\ell}$ and $v_\ell = \frac{1}{\sigma_\ell}A^{T}u_{\ell}$.
 Now we can compute the following:

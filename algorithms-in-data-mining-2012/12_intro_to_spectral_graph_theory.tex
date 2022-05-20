@@ -18,7 +18,7 @@ Or, friendship connections between users in a social network can offer insights 
 In this class we will review three ways to represent a graph as a matrix.
 The Adjacency matrix, the Markov transition matrix, and the Graph Laplacian.
 Relating properties of graphs to properties of the matrices which represent them is 
-researched in a subfield of computer science called Spectral Graph Theory.
+researched in a sub-field of computer science called Spectral Graph Theory.
 Here, we will barely scratch the surface of this vast literature.
 The aim is to provide some intuitions and access to the terminology.
 
@@ -124,9 +124,9 @@ The most natural matrix representing a graph (in my opinion) is the Graph Laplac
 \[
 L = D - A
 \]
-The graph Laplacian is positive semidefinite and symmetric matrix which incapsulates many different properties of the graph.
+The graph Laplacian is positive semi-definite and symmetric matrix which encapsulates many different properties of the graph.
 \begin{fact}
-The graph Laplacian $L$ is positive semidefinite.
+The graph Laplacian $L$ is positive semi-definite.
 \end{fact}
 \begin{proof}
 Let us define $L_{i,j}$ as an $n \times n$ matrix whose entries are all zero apart for $L_{i,j}(i,i) = L_{i,j}(j,j) =1$ and  $L_{i,j}(i,j) = L_{i,j}(j,i) = -1$.

@@ -6,7 +6,7 @@
 
 
 
-Nearest neighbor search is a fundamental computational building block in computer vision, graphics, data mining, machine learning, and many other subfields.
+Nearest neighbor search is a fundamental computational building block in computer vision, graphics, data mining, machine learning, and many other sub-fields.
 As an example, consider a simple k-nearest-neighbor-classifier which, for each point predicts its class
 by the a majority vote over its neighbors' classes. As simplistic as this classifier sounds, it actually performs 
 very well in many scenarios. 
@@ -138,7 +138,7 @@ This concludes the observation that the fraction of the volume which is inside t
 exponentially small compared to the cube.
 A counter intuitive way of viewing this is that almost the entire volume of the cube is concentrated at the ``corners".
 
-\subsection{Orthogonallity of random vectors}
+\subsection{Orthogonality of random vectors}
 
 It turns out that two random vectors are also almost orthogonal.
 We can see this in two ways.
@@ -152,7 +152,7 @@ $\E[\langle x,y \rangle^2] = \E[\langle x,y_1\rangle^2] = \E[\frac{1}{d}\sum_{i=
 
 It is not hard to show that in fact for any vector $x$, if $y$ is chosen uniformly at random from the unit sphere 
 then $\Pr[ \langle x,y \rangle  \ge \frac{t}{\sqrt{d}}] \le e^{-t^2/2}$.
-First, replace that uniform distribution over the unit sphere with an i.i.d. distribution of gaussians $y(i)\sim \N(0,\frac{1}{\sqrt{d}})$.
+First, replace that uniform distribution over the unit sphere with an i.i.d. distribution of Gaussians $y(i)\sim \N(0,\frac{1}{\sqrt{d}})$.
 Note that $E[\|y\|^2] = 1$, moreover, from the sharp concentration of the $\chi^2$ distribution we know that $E[\|y\|^2] \approx 1$.
 For convenience we will assume that $E[\|y\|^2] = 1$ and will ignore the small inaccuracy.
 Moreover, due to the rotational invariance of the Gaussian distribution we have that any direction is equally likely and thus this

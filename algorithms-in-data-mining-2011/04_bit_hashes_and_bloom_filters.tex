@@ -3,9 +3,9 @@
 
 \begin{document} %
 
-\lecture{4}{Bit Hashs and Bloom Filters}{Edo Liberty}
+\lecture{4}{Bit Hashes and Bloom Filters}{Edo Liberty}
 
-\section*{Bit Hashs vs. Bloom Filters}
+\section*{Bit Hashes vs. Bloom Filters}
 
 We want to represent a set of elements $S$ with a data structure such that
 we can query if an element $q$ is in $S$ or not.
@@ -20,7 +20,7 @@ These might be long strings, for example, and keeping them would be wasteful.
 Also, because we are willing to accept False Positives, we can alter the structure of the Hash table 
 and keep only one bit per entry in the array, we will call them bit-hashes.
 
-\subsection*{Bit-Hashs}
+\subsection*{Bit-Hashes}
 For a bit-hash structure we keep a bit array $A$ of length $N$ all initialized to $False$.
 and a hash function $h: \mbox{elements} \rightarrow [1,\ldots,N]$.
 

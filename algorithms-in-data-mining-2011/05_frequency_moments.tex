@@ -136,7 +136,7 @@ Consider the matrix $H \in \R^{s \times m}$ such that $H(i,j) = h_{i}(j)$.
 Also, consider representing each input element $a_i$ by $\vec{a_i}$, the $i$'th standard basis vector in $\R^m$ (the vector whose $i$'th entry is equal to $1$ and the rest are zero). Analogously, $\vec{A_i}$ is the vector representing the $i$'th element in the stream. Remember that our estimate $Y$ of $f_2$ was $\frac{1}{s}\sum_{i=1}^{s}Z_{i}^2= ||\frac{1}{\sqrt{s}}\vec{Z}||^2$. Moreover, from the definition of $\vec{Z}$, $H$, and $\vec{A_i}$ we have that $\vec{Z} = \sum_{i=1}^{N}H\vec{A_i} = H\sum_{i=1}^{N}\vec{A_i} = \frac{1}{\sqrt{s}}H\vec{A}$. Here, $\vec{A} = \sum_{i=1}^{N}\vec{A_i} = [n_1,n_2,\ldots,n_m]$. Note however, that $f_2 = ||\vec{A}||^2$ by definition of the second frequency moment.
 We get that for any stream and any element frequencies $ ||\frac{1}{\sqrt{s}}H\vec{A}||^2 \approx_{(\eps,\delta)} ||\vec{A}||^2$.
 In other words,  multiplying any vector $\vec{A}$ by the matrix $\frac{1}{\sqrt{s}}H$ is very likely to preserve its norm.
-We will see that this phenomenon is in fact more overreaching and has some serious consequences on point ensembles in high dimensional euclidian spaces. 
+We will see that this phenomenon is in fact more overreaching and has some serious consequences on point ensembles in high dimensional Euclidean spaces. 
 
 \end{document}
 

@@ -85,7 +85,7 @@ Computing the value of the function in this point gives $\sum_{i}z_i^2 \le (1/\e
 \end{proof}
 
 \subsection{Sampling from vectors with low $\ell_4$ norms}
-Here we prove a very simple fact. For vectors whose $\ell_4$ is low, dimensionally reduction can be obtained by sampling.
+Here we prove a very simple fact. For vectors whose $\ell_4$ is low, dimensionality reduction can be obtained by sampling.
 
 
 Let $y$ be a vector such that $\|y\|_2 = 1$. Let $z$ be a sampled version of $y$ such that $z_i = y_i/\sqrt{p}$ with probability $p$ and $0$ else. 
@@ -95,7 +95,7 @@ Note the $\E[\|z\|^2] = \E[\|y\|^2] = 1$ moreover:
 \Pr[|\|z\|^2 - 1| > \eps] = \Pr[|\sum z_i^2 - 1| > \eps] = \Pr[|\sum b_i y_i^2/p - 1| > \eps]
 \]
 Where $b_i$ are independent random indicator variables taking the $b_i = 1$ with probability $p$ and $b_i = 0$ else.
-To apply chernoff's bound we must assert that $y_i^2/p \le 1$. Let's assume this for now and return to it later.
+To apply Chernoff's bound we must assert that $y_i^2/p \le 1$. Let's assume this for now and return to it later.
 Applying Chernoff's bound we get
 \[
 \Pr[|\sum b_i y_i^2/p - 1| > \eps] \le e^{-\frac{c\eps^2}{\sigma^2}}

@@ -407,7 +407,7 @@ singular, then its pseudo-inverse is given by $A^{\dagger}=V
 replacing every nonzero entry by its reciprocal.
 \item Least squares: If we need to solve $Ax=b$ in the least-squares
 sense, then $x_{LS}=V \Sigma^{\dagger} U^{T} b$.
-\item Denoising -- Small singular values typically correspond to
+\item De-noising -- Small singular values typically correspond to
 noise. Take the matrix whose columns are the signals, compute SVD,
 zero small singular values, and reconstruct.
 \item Compression -- We have signals as the columns of the matrix

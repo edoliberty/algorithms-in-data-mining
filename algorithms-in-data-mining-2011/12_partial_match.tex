@@ -3,7 +3,7 @@
 
 \begin{document} %
 
-\lecture{12}{The Parital Match Problem}{Edo Liberty}
+\lecture{12}{The Partial Match Problem}{Edo Liberty}
 
 Search engines are based on the idea of an Inverted index.
 (not taking into account ranking which is, just as, if not more important...)
@@ -52,7 +52,7 @@ the set of documents which are contained in the query, i.e. return $\{P | P \in 
 Notice that the two problems are identical. If we map each document $P \rightarrow m \setminus P$ and
 $Q \rightarrow m \setminus Q$, then any results to the set containment problem will hold for the search problem as well.
 
-There are two brut force solutions for this problem. 
+There are two brute force solutions for this problem. 
 $i)$ pre-compute the search results to all $2^m$ possible queries.
 This would require only $O(m)$ operations per search but $\Omega(N2^m)$ space.
 $ii)$ perform no preprocessing at all and require only $O(Nm)$ space but also $\Omega(Nm)$ time per query search.
@@ -63,7 +63,7 @@ That said, no known algorithm come close to those hardness results' bounds.
 
 
 In this lecture we will present one of the algorithms presented in \cite{CIP02}.
-The idea of the algorithm is to solve the problem in a brut force manner but on a small sample of the words.
+The idea of the algorithm is to solve the problem in a brute force manner but on a small sample of the words.
 We start with the  preprocess stage: 
 \begin{enumerate}
 \item Select each word in the dictionary into a set $S$ w.p. $p$; $|S| \sim pm$.

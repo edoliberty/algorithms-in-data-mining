@@ -31,7 +31,7 @@ To do that we examine the norm or the difference multiplied by a test vector $w 
 \end{eqnarray*}
 %
 The vectors $u_\ell$ and $v_{\ell}$ are called the left and right singular vectors of $A$ and $\sigma_\ell$ are the singular vectors of $A$.
-It is costumery to order the singular values in descending order $\sigma_1 \ge \sigma_2, \ldots , \sigma_m \ge 0$.
+It is customary to order the singular values in descending order $\sigma_1 \ge \sigma_2, \ldots , \sigma_m \ge 0$.
 Also, we will denote by $r$ the rank of $A$. 
 Here is another very convenient way to write the fact that $A = \sum_{\ell=1}^{m} \sigma_{\ell} u_{\ell} v_{\ell}^{T}$
 \begin{itemize}
@@ -52,7 +52,7 @@ singular, then its pseudo-inverse is given by $A^{\dagger}=V
 replacing every nonzero entry by its reciprocal.
 \item Least squares: If we need to solve $Ax=b$ in the least-squares
 sense, then $x_{LS}=V \Sigma^{\dagger} U^{T} b$.
-\item Denoising -- Small singular values typically correspond to
+\item De-noising -- Small singular values typically correspond to
 noise. Take the matrix whose columns are the signals, compute SVD,
 zero small singular values, and reconstruct.
 \item Compression -- We have signals as the columns of the matrix
@@ -312,7 +312,7 @@ Demanding that the error in the estimation of $\sigma_1$ is less than $\eps$ giv
 \frac{|\alpha^{0}_{1}|}{|\alpha^{0}_{i}|}\left(\frac{\sigma_1}{\sigma_i}\right)^{2s} &\ge& \frac{n}{\eps}\\
 s &\ge& \frac{\log(n|\alpha^{0}_i|/\eps|\alpha^{0}|_1)}{2\log(\sigma_1/\sigma_i)}
 \end{eqnarray}
-From the two-stability of the gaussian distribution we have that $\alpha^{0}_i \sim \N(0,1)$. 
+From the two-stability of the Gaussian distribution we have that $\alpha^{0}_i \sim \N(0,1)$. 
 Therefore, $\Pr[\alpha^{0}_i > t] \le e^{-t^2}$ which gives that with probability at least $1-\delta/2$ we have for
 all $i$, $|\alpha^{0}_i | \le \sqrt{\log(2n/\delta)}$. Also, $\Pr[|\alpha^{0}_1 | \le \delta/4 ] \le \delta/2$ (this is because 
 $\Pr[|z| < t] \le max_{r}\Psi_{z}(r)\cdot2t$ for any distribution and the normal distribution function at zero takes it maximal value which is less than $2$) 
