@@ -1,0 +1,382 @@
+/* CSS Document — Matched to edoliberty.github.io */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Rubik:ital,wght@0,300;0,400;0,700;1,300;1,700&display=swap');
+
+::selection {
+  background-color: #33CC99;
+}
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+:root {
+  --topbar-h: 3.1rem;
+  --strip-h: 3.4rem;
+}
+
+body {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 300;
+  color: #1a1c22;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Merriweather Sans', sans-serif;
+}
+
+h1,
+h1.display-1,
+h1.display-2,
+h1.display-3,
+h1.display-4 {
+  font-weight: 700;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+}
+
+/* Section headings match the wordmark (Merriweather Sans 700, 1rem)
+   for a flat, minimal type scale. */
+h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: .85rem;
+}
+
+h3 {
+  font-size: .95rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: .5rem;
+}
+
+.course-title {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1a1c22;
+  margin-bottom: .25rem;
+}
+
+.course-subtitle {
+  color: #6a7180;
+  font-size: .95rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Horizontal divider at the end of each content section */
+main .row.my-5:not(:last-child),
+main .row.hero {
+  border-bottom: 1px solid #b6bcc9;
+  padding-bottom: .75em;
+}
+
+main .row.first-section {
+  margin-top: 0 !important;
+  margin-bottom: 3rem !important;
+  border-bottom: 1px solid #b6bcc9;
+  padding-bottom: .75em;
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+a {
+  color: #031bb3;
+}
+
+img {
+  max-width: 100%;
+}
+
+code {
+  font-size: .88em;
+  color: #1a1c22;
+  background-color: #f6f7fa;
+  padding: .15em .35em;
+  border-radius: 3px;
+}
+
+pre {
+  background-color: #f6f7fa;
+  border: 1px solid #e6e8ee;
+  border-radius: 4px;
+  padding: .75rem 1rem;
+  font-size: .86rem;
+  color: #1a1c22;
+  margin-top: .5rem;
+  margin-bottom: .75rem;
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+ul {
+  margin-top: .75em;
+  list-style: none;
+  padding-left: 0;
+}
+
+ol {
+  margin-top: .75em;
+  padding-left: 1.25rem;
+}
+
+li + li {
+  margin-top: .5em;
+  padding-top: .5em;
+  border-top: 1px solid #e6e8ee;
+}
+
+/* Compact numbered lists (e.g. topics list) */
+ol.compact-list li + li {
+  margin-top: .35em;
+  padding-top: .35em;
+}
+
+/* Nested lists inside lecture entries */
+li ul {
+  margin-top: .45em;
+  margin-bottom: .25em;
+  padding-left: 1rem;
+  border-left: 2px solid #e6e8ee;
+}
+
+li ul li + li {
+  margin-top: .35em;
+  padding-top: .35em;
+  border-top: none;
+}
+
+li p {
+  margin: 0 0 .25em;
+}
+
+/* Metadata key-value grid in Overview */
+.meta-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .75rem;
+}
+
+.meta-label {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 700;
+  font-size: .88rem;
+  min-width: 8.5rem;
+  color: #1a1c22;
+}
+
+.meta-value {
+  flex: 1 1 20rem;
+}
+
+/* Schedule table */
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .92rem;
+  margin-top: .75rem;
+}
+
+.schedule-table th {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 700;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #6a7180;
+  border-bottom: 1px solid #b6bcc9;
+  padding: .5rem .6rem;
+  text-align: left;
+}
+
+.schedule-table td {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid #e6e8ee;
+  vertical-align: top;
+}
+
+.schedule-table tr.no-class td {
+  color: #6a7180;
+  font-style: italic;
+  background-color: #fafbfc;
+}
+
+.schedule-table .due-badge {
+  font-weight: 700;
+  color: #031bb3;
+}
+
+/* ---- Top bar: cross-page navigation only ---- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: rgba(255, 255, 255, .9);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid #e6e8ee;
+}
+.topbar__inner {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: .85rem 15px;
+}
+.topbar .brand {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-weight: 700;
+  color: #1a1c22;
+  text-decoration: none;
+}
+.topbar .brand:hover {
+  color: #031bb3;
+  text-decoration: none;
+}
+.topbar nav {
+  margin-left: auto;
+  display: flex;
+  gap: 1.25rem;
+}
+.topbar nav a {
+  color: #6a7180;
+  font-size: .95rem;
+}
+.topbar nav a.current {
+  color: #1a1c22;
+}
+
+/* ---- Left table of contents ---- */
+.toc {
+  position: sticky;
+  top: 3.4rem;
+  align-self: start;
+  max-height: calc(100vh - 3.4rem);
+  overflow-y: auto;
+  padding: 2rem 0;
+}
+.toc__label {
+  font-family: 'Merriweather Sans', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #99a0ad;
+  margin: 0 0 .8rem;
+}
+.toc__label a {
+  color: inherit;
+  text-decoration: none;
+}
+.toc__label a:hover {
+  color: #031bb3;
+}
+.toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toc__list li + li {
+  margin-top: .1rem;
+  padding-top: 0;
+  border-top: none;
+}
+.toc__list a {
+  display: block;
+  padding: .3rem .75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 4px 4px 0;
+  color: #6a7180;
+  font-size: .92rem;
+  line-height: 1.35;
+}
+.toc__list a:hover {
+  color: #1a1c22;
+  background: #f6f7fa;
+  text-decoration: none;
+}
+.toc__list a.active {
+  color: #031bb3;
+  background: #eef0fb;
+  border-left-color: #031bb3;
+}
+
+/* ---- Content column ---- */
+main {
+  padding: 2rem 0 1.5rem;
+}
+main > h1:first-child {
+  margin-top: 0;
+}
+[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* ---- Mobile: collapse the rail into a sticky chip strip ---- */
+@media (max-width: 767.98px) {
+  .topbar__inner {
+    flex-wrap: wrap;
+    row-gap: .3rem;
+  }
+  .topbar nav {
+    flex-wrap: wrap;
+    gap: .3rem .9rem;
+  }
+  .toc {
+    position: sticky;
+    top: var(--topbar-h);
+    max-height: none;
+    overflow: visible;
+    margin: 0 -15px;
+    padding: .55rem 0;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e6e8ee;
+    z-index: 1020;
+    transition: transform .25s ease;
+  }
+  .toc.toc--hidden {
+    transform: translateY(calc(-100% - var(--topbar-h)));
+  }
+  .toc__label {
+    display: none;
+  }
+  .toc__list {
+    display: flex;
+    gap: .4rem;
+    overflow-x: auto;
+    padding: 0 15px .15rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .toc__list li + li {
+    margin-top: 0;
+  }
+  .toc__list a {
+    white-space: nowrap;
+  }
+  main {
+    padding-top: 1.4rem;
+  }
+  [id] {
+    scroll-margin-top: calc(var(--topbar-h) + var(--strip-h) + .5rem);
+  }
+}

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title dir="ltr">Algorithms in Data Mining — 0368-3248-01 (Tel Aviv University, 2011–2013)</title>
+    <meta name="description" content="0368-3248-01: Algorithms in Data Mining (Tel Aviv University, Fall 2011, 2012, and 2013), instructed by Edo Liberty. Lecture notes, assignments, and exams on streaming algorithms, sketching, dimensionality reduction, matrix approximation, clustering, and high-dimensional search.">
+    <meta name="keywords" content="0368-3248-01, Algorithms in Data Mining, Tel Aviv University, Edo Liberty, streaming algorithms, reservoir sampling, Count-Min Sketch, Count Sketch, Misra-Gries, Bloom filters, frequency moments, AMS sketch, Johnson-Lindenstrauss, Fast Random Projection, FJLT, SVD, matrix sampling, Frequent Directions, k-means, k-means++, Locality Sensitive Hashing, LSH, spectral graph theory">
+    <meta name="author" content="Edo Liberty">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="0368-3248-01 — Tel Aviv University">
+    <meta property="og:title" content="Algorithms in Data Mining (0368-3248-01, Fall 2011–2013)">
+    <meta property="og:description" content="Advanced undergraduate and graduate course at Tel Aviv University covering randomized and streaming algorithms for mining massive data sets. Instructed by Edo Liberty.">
+    <meta property="og:locale" content="en_US">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Algorithms in Data Mining (0368-3248-01, Fall 2011–2013)">
+    <meta name="twitter:description" content="Advanced undergraduate and graduate course at Tel Aviv University covering randomized and streaming algorithms for mining massive data sets.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Algorithms in Data Mining",
+      "courseCode": "0368-3248-01",
+      "description": "Advanced undergraduate and graduate course covering algorithmic tools for mining massive data sets with an emphasis on randomization, streaming algorithms, dimensionality reduction, matrix sketching, clustering, and high-dimensional similarity search.",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Tel Aviv University",
+        "url": "https://english.tau.ac.il/"
+      },
+      "instructor": [
+        {
+          "@type": "Person",
+          "name": "Edo Liberty",
+          "url": "https://edoliberty.github.io"
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body id="top">
+    <!-- ########################################################## -->
+    <!-- ################ Top bar (navigation) #################### -->
+    <!-- ########################################################## -->
+    <header class="topbar" id="topbar">
+      <div class="container topbar__inner">
+        <a class="brand" href="#top" id="brand-link">0368-3248-01</a>
+        <nav aria-label="Site">
+          <a href="#syllabus" id="topbar-syllabus">Syllabus &amp; Notes</a>
+          <a href="#assignments" id="topbar-assignments">Assignments &amp; Exams</a>
+          <a href="#literature" id="topbar-literature">Literature</a>
+          <a href="https://github.com/edoliberty/algorithms-in-data-mining" id="topbar-github">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <!-- ###################### Table of contents ###################### -->
+        <nav class="col-12 col-md-3 toc" aria-label="On this page" id="toc-nav">
+          <p class="toc__label"><a href="#top">0368-3248-01 &middot; 2011&ndash;13</a></p>
+          <ul class="toc__list">
+            <li><a href="#overview" id="toc-overview">Overview</a></li>
+            <li><a href="#description" id="toc-description">Class Description</a></li>
+            <li><a href="#syllabus" id="toc-syllabus">Syllabus &amp; Notes</a></li>
+            <li><a href="#editions" id="toc-editions">Course Editions</a></li>
+            <li><a href="#assignments" id="toc-assignments">Assignments &amp; Exams</a></li>
+            <li><a href="#grading" id="toc-grading">Grading &amp; Projects</a></li>
+            <li><a href="#literature" id="toc-literature">Selected Literature</a></li>
+            <li><a href="#contribute" id="toc-contribute">Contribute &amp; Related</a></li>
+          </ul>
+        </nav>
+
+        <main class="col-12 col-md-9">
+          <h1 class="sr-only">Algorithms in Data Mining (0368-3248-01, Tel Aviv University, Fall 2011–2013)</h1>
+
+          <!-- ########################################################## -->
+          <!-- ################ Overview ################################ -->
+          <!-- ########################################################## -->
+          <div class="row first-section" id="overview">
+            <div class="col-12">
+              <div class="course-title" dir="ltr">Algorithms in Data Mining</div>
+              <div class="course-subtitle">0368-3248-01 &middot; Fall 2011, 2012 &amp; 2013 &middot; Tel Aviv University</div>
+              <ul class="meta-list">
+                <li>
+                  <span class="meta-label">Instructor</span>
+                  <span class="meta-value">
+                    <a href="https://edoliberty.github.io">Edo Liberty</a>, Founder and CEO of <a href="https://www.pinecone.io">Pinecone</a> (<a href="https://scholar.google.com/citations?user=QHS_pZAAAAAJ&amp;hl=en">Publications</a>)
+                  </span>
+                </li>
+                <li>
+                  <span class="meta-label">Institution</span>
+                  <span class="meta-value">
+                    <a href="https://english.tau.ac.il/">Tel Aviv University</a>, Blavatnik School of Computer Science
+                  </span>
+                </li>
+                <li>
+                  <span class="meta-label">Editions</span>
+                  <span class="meta-value">
+                    <a href="#editions">Fall 2013</a> (Mondays, 17:00&ndash;20:00) &bull;
+                    <a href="#editions">Fall 2012</a> (Mondays, 17:00&ndash;20:00) &bull;
+                    <a href="#editions">Fall 2011</a> (9:00&ndash;12:00, Dan David 112)
+                  </span>
+                </li>
+                <li>
+                  <span class="meta-label">Prerequisites</span>
+                  <span class="meta-value">
+                    Probability theory, basic combinatorics, linear algebra, basic complexity theory, and traditional data structures.
+                  </span>
+                </li>
+                <li>
+                  <span class="meta-label">Class Notes</span>
+                  <span class="meta-value">
+                    <a href="algorithms-in-data-mining-2013/01_probability_recap.pdf">L1a: Probability Recap</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/01_mark_and_recapture.pdf">L1b: Mark &amp; Recapture</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/02_chernoff_bound.pdf">L2a: Chernoff Bound</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/02_sampling.pdf">L2b: Sampling</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/03_frequent_items_in_streams.pdf">L3: Frequent Items</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/04_frequency_moments.pdf">L4: Frequency Moments</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/05_random_projection.pdf">L5: Random Projection</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/06_fast_random_projection.pdf">L6: Fast Random Projection</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/07_singular_value_decomposition.pdf">L7: SVD &amp; PCA</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/08_matrix_sampling.pdf">L8: Matrix Sampling</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/09_matrix_sampling_continued.pdf">L9: Matrix Sketching</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/10_k_means_clustering.pdf">L10: <em>k</em>-Means</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/11_nearest_neighbor_search.pdf">L11: Nearest Neighbor Search</a> &bull;
+                    <a href="algorithms-in-data-mining-2013/12_approximate_nearest_neighbor_search.pdf">L12: ANNS &amp; LSH</a>
+                  </span>
+                </li>
+                <li>
+                  <span class="meta-label">Special Topics</span>
+                  <span class="meta-value">
+                    <a href="algorithms-in-data-mining-2011/03_dinamic_item_set_counting.pdf">Dynamic Itemset Counting ('11)</a> &bull;
+                    <a href="algorithms-in-data-mining-2011/04_bit_hashes_and_bloom_filters.pdf">Bloom Filters ('11)</a> &bull;
+                    <a href="algorithms-in-data-mining-2011/12_partial_match.pdf">Partial Match &amp; Inverted Indexes ('11)</a> &bull;
+                    <a href="algorithms-in-data-mining-2012/08_metric_embedding_into_tree.pdf">Tree Metric Embeddings ('12)</a> &bull;
+                    <a href="algorithms-in-data-mining-2012/12_intro_to_spectral_graph_theory.pdf">Spectral Graph Theory ('12)</a>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Class Description ####################### -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="description">
+            <div class="col-12">
+              <h2 dir="ltr">Class Description</h2>
+              <p>
+                Data Mining is concerned with efficiently extracting statistics, patterns, structures, or meanings from raw data. This task becomes challenging when the volume of data is massive, as is standard in modern datasets. This course surveys foundational algorithms, mathematical concepts, and data structures for analyzing large-scale datasets, with a particular emphasis on randomization and the <strong>streaming model</strong> &mdash; where items (integers, strings, documents, sets, or matrix entries) arrive one at a time and must be processed under severe space limitations.
+              </p>
+              <p>
+                Topics covered include data sampling and reservoir sampling, finding frequent items and itemsets in data streams, Bloom filters and sketches, counting distinct elements and general frequency moment estimation, random projections and the Fast Johnson-Lindenstrauss Transform (FJLT), Singular Value Decomposition (SVD), matrix sampling and deterministic matrix sketching (Frequent Directions), <em>k</em>-means clustering, spectral graph theory, and exact and approximate nearest neighbor search (Locality Sensitive Hashing) in high dimensions.
+              </p>
+              <p>
+                The lecture notes present algorithms in their most basic form for didactic clarity. Correctness proofs are designed to be as simple and self-contained as possible, each presentable in roughly one long frontal session. An advanced undergraduate or graduate student with experience in probability, linear algebra, algorithms, and combinatorics should be able to follow the course. The class is devoted to ideas, algorithms, and proofs &mdash; as one student memorably noted in course feedback: <em>&ldquo;you think you&rsquo;re going to get an interesting course and you end up getting a load of math.&rdquo;</em>
+              </p>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Syllabus & Class Notes ################## -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="syllabus">
+            <div class="col-12">
+              <h2 dir="ltr">Syllabus &amp; Class Notes</h2>
+              <p>
+                Below is the complete curriculum organized by lecture topic, linking to the primary Fall 2013 lecture notes alongside earlier editions from Fall 2012 and Fall 2011.
+              </p>
+              <ul>
+                <li>
+                  <p>
+                    <strong>Lecture 1 &mdash; <a href="algorithms-in-data-mining-2013/01_probability_recap.pdf">Probability Recap (PDF)</a> &amp; <a href="algorithms-in-data-mining-2013/01_mark_and_recapture.pdf">Mark and Recapture (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/01_probability_recap.pdf">2012 Recap</a> &middot; <a href="algorithms-in-data-mining-2012/01_mark_and_recapture.pdf">2012 M&amp;R</a> &middot; <a href="algorithms-in-data-mining-2011/01_preliminaries.pdf">2011 Prelim</a> &middot; <a href="algorithms-in-data-mining-2011/01_mark_and_recapture.pdf">2011 M&amp;R</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Discrete and continuous random variables, probability distributions, and expectation.</li>
+                    <li>Conditional expectation, dependence vs. independence, linearity of expectation, and additivity of variance.</li>
+                    <li>Markov&rsquo;s inequality and Chebyshev&rsquo;s inequality.</li>
+                    <li>Mark and recapture: estimating population size <em>n</em> from two independent samples of size <em>k</em> via collision counts and linearity of expectation.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 2 &mdash; <a href="algorithms-in-data-mining-2013/02_chernoff_bound.pdf">Probabilistic Inequalities (PDF)</a> &amp; <a href="algorithms-in-data-mining-2013/02_sampling.pdf">Sampling from Streams (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/02_chernoff_bound.pdf">2012 Chernoff</a> &middot; <a href="algorithms-in-data-mining-2012/02_sampling.pdf">2012 Sampling</a> &middot; <a href="algorithms-in-data-mining-2011/02_sampling.pdf">2011 Sampling</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Chernoff&rsquo;s bound: full proof via exponential moment generating functions and multiplicative forms for sums of independent Bernoulli trials.</li>
+                    <li>Subset size estimation via uniform random sampling and sample complexity bounds.</li>
+                    <li>The union bound: simultaneous accuracy guarantees across <em>m</em> subsets with only logarithmic overhead.</li>
+                    <li>Uniform sampling from streams of unknown length, Fisher&ndash;Yates shuffling, and Reservoir Sampling.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 3 &mdash; <a href="algorithms-in-data-mining-2013/03_frequent_items_in_streams.pdf">Item Frequency Estimation in Streams (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/03_frequent_items_in_streams.pdf">2012 Notes</a> &middot; <a href="algorithms-in-data-mining-2011/04_count_sketches.pdf">2011 Count Sketches</a> &middot; <a href="algorithms-in-data-mining-2011/04_bit_hashes_and_bloom_filters.pdf">2011 Bloom Filters</a>]</span>
+                  </p>
+                  <ul>
+                    <li>The heavy hitters and item frequency estimation problem in data streams using sublinear <em>o(n)</em> memory.</li>
+                    <li>Count-Min Sketch (Cormode &amp; Muthukrishnan; Manku &amp; Motwani): reducing space dependence on &epsilon; from <em>O(1/&epsilon;&sup2;)</em> to <em>O(log(n/&delta;)/&epsilon;)</em>.</li>
+                    <li>Deterministic Frequent Items / Lossy Counting (Misra &amp; Gries; Demaine et al.; Karp, Papadimitriou &amp; Shenker): <em>O(1/&epsilon;)</em> space and <em>O(1)</em> amortized update time.</li>
+                    <li>Count Sketch (Charikar, Chen &amp; Farach-Colton): random sign hashes and median-of-buckets aggregation for &ell;<sub>2</sub> residual tail guarantees.</li>
+                    <li>Bit-hashes vs. Bloom filters (<a href="algorithms-in-data-mining-2011/04_bit_hashes_and_bloom_filters.pdf">2011 Notes</a>): reducing space from <em>O(n/&delta;)</em> to <em>O(n log(1/&delta;))</em> bits using <em>k = O(log(1/&delta;))</em> hash functions.</li>
+                    <li>Frequent itemsets in market-basket data (<a href="algorithms-in-data-mining-2011/03_agenda_frequent_item_sets.pdf">2011 Agenda</a> &middot; <a href="algorithms-in-data-mining-2011/03_dinamic_item_set_counting.pdf">Dynamic Itemset Counting</a>): Apriori, prefix tries, and DIC.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 4 &mdash; <a href="algorithms-in-data-mining-2013/04_frequency_moments.pdf">Frequency Moment Estimation in Streams (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/04_frequency_moments.pdf">2012 Notes</a> &middot; <a href="algorithms-in-data-mining-2011/05_frequency_moments.pdf">2011 Notes</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Frequency moments <em>f<sub>k</sub> = &sum;<sub>i</sub> n<sub>i</sub><sup>k</sup></em>: distinct elements (<em>f</em><sub>0</sub>), stream length (<em>f</em><sub>1</sub>), and repeat rate / skew (<em>f</em><sub>2</sub>).</li>
+                    <li>Estimating <em>f</em><sub>0</sub> (distinct elements) via minimum hash values (Alon, Matias &amp; Szegedy; Cohen).</li>
+                    <li>Estimating general frequency moments <em>f<sub>k</sub></em> (<em>k &gt; 0</em>) via the AMS estimator <em>X = N(r<sup>k</sup> &minus; (r&minus;1)<sup>k</sup>)</em>.</li>
+                    <li>Estimating the second moment <em>f</em><sub>2</sub> in <em>O(1/(&epsilon;&sup2;&delta;))</em> space via random &plusmn;1 projections (Tug-of-War sketch) and its connection to norm-preserving random projections.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 5 &mdash; <a href="algorithms-in-data-mining-2013/05_random_projection.pdf">Random Projection &amp; The Johnson-Lindenstrauss Lemma (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/05_random_projections.pdf">2012 Notes</a> &middot; <a href="algorithms-in-data-mining-2011/06_random_projections.pdf">2011 Notes</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Metric distortion and dimensionality reduction for pairwise Euclidean distances.</li>
+                    <li>The Johnson-Lindenstrauss Lemma: embedding <em>n</em> points into <em>k = O(log(n)/&epsilon;&sup2;)</em> dimensions with <em>(1 &plusmn; &epsilon;)</em> distortion.</li>
+                    <li>Random projections via matrices with independent normally distributed (Gaussian) entries and sub-Gaussian tail bounds.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 6 &mdash; <a href="algorithms-in-data-mining-2013/06_fast_random_projection.pdf">Fast Random Projection (FJLT) (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/05_random_projections.pdf">2012 Notes (Sec. 3&ndash;5)</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Accelerating Johnson-Lindenstrauss projections from <em>O(kd)</em> to <em>O(d log d)</em> time (Ailon &amp; Chazelle; Ailon &amp; Liberty).</li>
+                    <li>Fast vector &ell;<sub>4</sub>-norm reduction (vector spreading) via randomized Walsh&ndash;Hadamard transforms and Khintchine&rsquo;s inequality.</li>
+                    <li>Importance sampling and sparse random projections on vectors with bounded &ell;<sub>4</sub> norm (<em>&Vert;x&Vert;</em><sub>4</sub> = <em>O(d<sup>&minus;1/4</sup>)</em>).</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 7 &mdash; <a href="algorithms-in-data-mining-2013/07_singular_value_decomposition.pdf">Singular Value Decomposition (SVD) &amp; PCA (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/06_singular_value_decomposition.pdf">2012 Notes</a> &middot; <a href="algorithms-in-data-mining-2011/08_singular_value_decomposition.pdf">2011 SVD</a> &middot; <a href="algorithms-in-data-mining-2011/09_the_power_method.pdf">2011 Power Method</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Geometry, existence proof, and fundamental properties of the Singular Value Decomposition <em>A = U&Sigma;V<sup>T</sup></em>.</li>
+                    <li>Eckart&ndash;Young&ndash;Mirsky Theorem: optimal rank-<em>k</em> matrix approximation in both the spectral norm and Frobenius norm.</li>
+                    <li>Data mining applications: least-squares linear regression (pseudo-inverse), Principal Component Analysis (PCA), and closest orthogonal matrix.</li>
+                    <li>Computing the SVD of large matrices via the Power Method (simultaneous iteration).</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 8 &mdash; <a href="algorithms-in-data-mining-2013/08_matrix_sampling.pdf">Matrix Sampling and Rank-<em>k</em> Approximation (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/07_matrix_sampling.pdf">2012 Notes</a> &middot; <a href="algorithms-in-data-mining-2011/09_rudelson-ahlswede-winter-recap.pdf">2011 Ahlswede&ndash;Winter Notes</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Accelerating eigenvector and SVD computation by sparsifying dense matrices.</li>
+                    <li>Element-wise matrix sampling: picking entries with probability proportional to squared magnitude (Arora, Hazan &amp; Kale; Drineas &amp; Zouzias).</li>
+                    <li>Matrix concentration inequalities: the Matrix Bernstein / Chernoff bound and the Ahlswede&ndash;Winter inequality.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 9 &mdash; <a href="algorithms-in-data-mining-2013/09_matrix_sampling_continued.pdf">Matrix Approximation Continued: Column Sampling &amp; Deterministic Matrix Sketching (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>PCA with an approximate covariance matrix and additive-error rank-<em>k</em> bounds.</li>
+                    <li>Column subset selection by row/column norm-squared sampling (Drineas &amp; Kannan; Rudelson &amp; Vershynin; Boutsidis, Drineas &amp; Magdon-Ismail).</li>
+                    <li>Deterministic Matrix Sketching / Frequent Directions (Liberty, 2012): streaming matrix covariance approximation analogous to the Misra&ndash;Gries frequent items algorithm.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 10 &mdash; <a href="algorithms-in-data-mining-2013/10_k_means_clustering.pdf"><em>k</em>-Means Clustering (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/11_k_means_clustering.pdf">2012 Notes</a>]</span>
+                  </p>
+                  <ul>
+                    <li>The <em>k</em>-means clustering objective (sum of squared Euclidean distances) and Lloyd&rsquo;s iterative algorithm.</li>
+                    <li>Connection between <em>k</em>-means and PCA: spectral relaxation of cluster indicator matrices (Zha et al.; Ding &amp; He) and 2-approximation via rank-<em>k</em> SVD projection.</li>
+                    <li>&epsilon;-net argument for <em>k</em>-means in fixed low dimensions.</li>
+                    <li>Sampling-based seeding, coresets, and <em>k</em>-means++ (Arthur &amp; Vassilvitskii).</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 11 &mdash; <a href="algorithms-in-data-mining-2013/11_nearest_neighbor_search.pdf">Nearest Neighbor Search and the Curse of Dimensionality (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/09_nearest_neighbor_search.pdf">2012 Notes</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Exact and <em>(1 + &epsilon;)</em>-approximate nearest neighbor search problem formulations.</li>
+                    <li>Space-partitioning data structures: <em>k</em>-d trees (Bentley, 1975), construction, and range/nearest-neighbor query traversal.</li>
+                    <li>The Curse of Dimensionality: why <em>k</em>-d trees inspect <em>&Omega;(2<sup>d</sup>)</em> cells in high dimensions, concentration of volume near the boundary of high-dimensional balls and cubes, and near-orthogonality of random vectors.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Lecture 12 &mdash; <a href="algorithms-in-data-mining-2013/12_approximate_nearest_neighbor_search.pdf">Approximate Nearest Neighbor Search &amp; Locality Sensitive Hashing (PDF)</a></strong>
+                    <span>[<a href="algorithms-in-data-mining-2012/10_approximate_nearest_neighbor_search.pdf">2012 Notes</a> &middot; <a href="algorithms-in-data-mining-2011/11_approximate_nearest_neighbor_search_lsh.pdf">2011 Notes</a>]</span>
+                  </p>
+                  <ul>
+                    <li>Reduction from Approximate Nearest Neighbor Search to the <em>(c, r)</em>-Approximate Near Neighbor decision problem.</li>
+                    <li>Locality Sensitive Hashing (LSH) families (Gionis, Indyk &amp; Motwani): amplifying collision probability gaps via concatenation and multiple hash tables in <em>O(n<sup>&rho;</sup>)</em> query time, where <em>&rho; = log(p<sub>1</sub>)/log(p<sub>2</sub>)</em>.</li>
+                    <li>LSH constructions: bit sampling on the Hamming cube <em>{0,1}<sup>d</sup></em> with <em>&rho; = 1/c</em>, similarity search, and random hyperplane rounding (SimHash, Charikar) on the unit sphere <em>S<sup>d&minus;1</sup></em>.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Additional Topics (2011 &amp; 2012 Editions) &mdash; <a href="algorithms-in-data-mining-2012/12_intro_to_spectral_graph_theory.pdf">Spectral Graph Theory (PDF)</a>, <a href="algorithms-in-data-mining-2012/08_metric_embedding_into_tree.pdf">Tree Metric Embeddings (PDF)</a> &amp; <a href="algorithms-in-data-mining-2011/12_partial_match.pdf">Partial Match (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li><strong><a href="algorithms-in-data-mining-2012/12_intro_to_spectral_graph_theory.pdf">Very Short Intro to Spectral Graph Theory (2012 Lecture 12)</a>:</strong> Adjacency matrix eigenvalue bounds and chromatic number; Markov transition matrices and stationary distributions of random walks; Graph Laplacian <em>L = D &minus; A</em>, positive semi-definiteness, connected components, and the Fiedler vector for spectral clustering.</li>
+                    <li><strong><a href="algorithms-in-data-mining-2012/08_metric_embedding_into_tree.pdf">Metric Embedding into Random Trees (2012 Lecture 8)</a>:</strong> Probabilistic embeddings of finite metric spaces into dominating tree metrics (notes from a course by Avner Magen).</li>
+                    <li><strong><a href="algorithms-in-data-mining-2011/12_partial_match.pdf">The Partial Match &amp; Containment Query Problem (2011 Lecture 12)</a>:</strong> Inverted indexes, posting list intersection in search engines,equivalence of subset and containment queries, and sublinear-time randomized algorithms via dictionary sampling and representative sets (Charikar, Indyk &amp; Panigrahy).</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Course Editions ######################### -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="editions">
+            <div class="col-12">
+              <h2 dir="ltr">Course Editions &amp; Materials Matrix (2011&ndash;2013)</h2>
+              <p>Below is a side-by-side index of all lecture notes, home assignments, and exams across the three academic years taught at Tel Aviv University.</p>
+              <div class="table-responsive">
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th>Session</th>
+                      <th>Fall 2013</th>
+                      <th>Fall 2012</th>
+                      <th>Fall 2011</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/01_probability_recap.pdf">Probability Recap</a> &bull;
+                        <a href="algorithms-in-data-mining-2013/01_mark_and_recapture.pdf">Mark &amp; Recapture</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/01_probability_recap.pdf">Probability Recap</a> &bull;
+                        <a href="algorithms-in-data-mining-2012/01_mark_and_recapture.pdf">Mark &amp; Recapture</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/01_preliminaries.pdf">Preliminaries</a> &bull;
+                        <a href="algorithms-in-data-mining-2011/01_mark_and_recapture.pdf">Mark &amp; Recapture</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/02_chernoff_bound.pdf">Probabilistic Inequalities</a> &bull;
+                        <a href="algorithms-in-data-mining-2013/02_sampling.pdf">Sampling</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/02_chernoff_bound.pdf">Chernoff Bound</a> &bull;
+                        <a href="algorithms-in-data-mining-2012/02_sampling.pdf">Sampling</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/02_sampling.pdf">Sampling</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/03_frequent_items_in_streams.pdf">Item Frequency Estimation in Streams</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/03_frequent_items_in_streams.pdf">Frequent Items in Streams</a><br>
+                        <span class="due-badge">HW 1:</span> <a href="algorithms-in-data-mining-2012/03_assignment_1.pdf">Assignment</a> (<a href="algorithms-in-data-mining-2012/03_assignment_1_answers.pdf">Solutions</a>)
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/03_agenda_frequent_item_sets.pdf">Frequent Itemsets Agenda</a> &bull;
+                        <a href="algorithms-in-data-mining-2011/03_dinamic_item_set_counting.pdf">Dynamic Itemset Counting</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/04_frequency_moments.pdf">Frequency Moments in Streams</a><br>
+                        <span class="due-badge">HW 1:</span> <a href="algorithms-in-data-mining-2013/04_assignment.pdf">Assignment</a> (<a href="algorithms-in-data-mining-2013/04_assignment_answers.pdf">Solutions</a>)
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/04_frequency_moments.pdf">Frequency Moments</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/04_bit_hashes_and_bloom_filters.pdf">Bit Hashes &amp; Bloom Filters</a> &bull;
+                        <a href="algorithms-in-data-mining-2011/04_count_sketches.pdf">Count Sketches</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/05_random_projection.pdf">Random Projection</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/05_random_projections.pdf">Random Projections &amp; FJLT</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/05_frequency_moments.pdf">Estimating Frequency Moments</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/06_fast_random_projection.pdf">Fast Random Projection (FJLT)</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/06_singular_value_decomposition.pdf">SVD and PCA</a><br>
+                        <span class="due-badge">HW 2:</span> <a href="algorithms-in-data-mining-2012/06_assignment_2.pdf">Assignment</a> (<a href="algorithms-in-data-mining-2012/06_assignment_2_answers.pdf">Solutions</a>)
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/06_random_projections.pdf">Random Projections</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/07_singular_value_decomposition.pdf">Singular Value Decomposition</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/07_matrix_sampling.pdf">Matrix Sampling</a>
+                      </td>
+                      <td>
+                        Fast Random Projections
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/08_matrix_sampling.pdf">Matrix Sampling &amp; Rank-<em>k</em> Approx.</a><br>
+                        <span class="due-badge">HW 2:</span> <a href="algorithms-in-data-mining-2013/08_assignment.pdf">Assignment</a> (<a href="algorithms-in-data-mining-2013/08_assignment_answers.pdf">Solutions</a>)
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/08_metric_embedding_into_tree.pdf">Metric Embedding into Trees</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/08_singular_value_decomposition.pdf">Singular Value Decomposition</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>9</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/09_matrix_sampling_continued.pdf">Matrix Approximation Continued</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/09_nearest_neighbor_search.pdf">Nearest Neighbor Search &amp; <em>k</em>-d Trees</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/09_the_power_method.pdf">The Power Method</a> &bull;
+                        <a href="algorithms-in-data-mining-2011/09_rudelson-ahlswede-winter-recap.pdf">Ahlswede&ndash;Winter Recap</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>10</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/10_k_means_clustering.pdf"><em>k</em>-Means Clustering</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/10_approximate_nearest_neighbor_search.pdf">ANNS &amp; LSH</a><br>
+                        <span class="due-badge">HW 3:</span> <a href="algorithms-in-data-mining-2012/10_assignment_3.pdf">Assignment</a>
+                      </td>
+                      <td>
+                        Nearest Neighbor Search &amp; <em>k</em>-d Trees
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>11</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/11_nearest_neighbor_search.pdf">Nearest Neighbor Search &amp; Curse of Dim.</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/11_k_means_clustering.pdf"><em>k</em>-Means Clustering</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/11_approximate_nearest_neighbor_search_lsh.pdf">ANNS &amp; Locality Sensitive Hashing</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>12</td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2013/12_approximate_nearest_neighbor_search.pdf">Approximate Nearest Neighbor Search</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2012/12_intro_to_spectral_graph_theory.pdf">Intro to Spectral Graph Theory</a>
+                      </td>
+                      <td>
+                        <a href="algorithms-in-data-mining-2011/12_partial_match.pdf">The Partial Match Problem</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Exams</td>
+                      <td>
+                        <span class="due-badge">Moed Alef:</span> <a href="algorithms-in-data-mining-2013/13_exam_alef.pdf">Exam (PDF)</a>
+                      </td>
+                      <td>
+                        <span class="due-badge">Moed Alef:</span> <a href="algorithms-in-data-mining-2012/13_exam_alef.pdf">Exam</a> (<a href="algorithms-in-data-mining-2012/13_exam_alef_answers.pdf">Solutions</a>)<br>
+                        <span class="due-badge">Moed Beit:</span> <a href="algorithms-in-data-mining-2012/14_exam_beit.pdf">Exam</a> (<a href="algorithms-in-data-mining-2012/14_exam_beit_answers.pdf">Solutions</a>)
+                      </td>
+                      <td>
+                        <span class="due-badge">Moed Alef:</span> <a href="algorithms-in-data-mining-2011/13_test_alef.pdf">Exam</a> (<a href="algorithms-in-data-mining-2011/13_test_alef_answers.pdf">Solutions</a>)<br>
+                        <span class="due-badge">Moed Beit:</span> <a href="algorithms-in-data-mining-2011/14_test_beit.pdf">Exam</a> (<a href="algorithms-in-data-mining-2011/14_test_beit_answers.pdf">Solutions</a>)
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Assignments & Exams ##################### -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="assignments">
+            <div class="col-12">
+              <h2 dir="ltr">Home Assignments &amp; Exams</h2>
+              <p>Self-contained problem sets and final examinations (Moed Alef and Moed Beit) with full worked solutions:</p>
+
+              <h3>Home Assignments</h3>
+              <ul>
+                <li>
+                  <p>
+                    <strong>Fall 2013, Assignment 1 &mdash; <a href="algorithms-in-data-mining-2013/04_assignment.pdf">Problems (PDF)</a> &bull; <a href="algorithms-in-data-mining-2013/04_assignment_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Probabilistic inequalities, approximating the size of a graph via neighborhood sampling, streaming approximate median, and simple high-capacity hashing.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2013, Assignment 2 &mdash; <a href="algorithms-in-data-mining-2013/08_assignment.pdf">Problems (PDF)</a> &bull; <a href="algorithms-in-data-mining-2013/08_assignment_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Randomized meta-algorithms (amplifying success probability via median-of-means), set intersections in streams, weak random projections, and SVD via the power method.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2012, Assignment 1 &mdash; <a href="algorithms-in-data-mining-2012/03_assignment_1.pdf">Problems (PDF)</a> &bull; <a href="algorithms-in-data-mining-2012/03_assignment_1_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Approximating the size of a tree via random root-to-leaf walks and streaming approximate histograms.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2012, Assignment 2 &mdash; <a href="algorithms-in-data-mining-2012/06_assignment_2.pdf">Problems (PDF)</a> &bull; <a href="algorithms-in-data-mining-2012/06_assignment_2_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Weak random projections and constant-factor norm preservation.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2012, Assignment 3 &mdash; <a href="algorithms-in-data-mining-2012/10_assignment_3.pdf">Problems (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Randomized meta-algorithms and spectral norm approximation via the power method.</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h3>Final Examinations (Moed Alef &amp; Moed Beit)</h3>
+              <ul>
+                <li>
+                  <p>
+                    <strong>Fall 2013, Exam Alef &mdash; <a href="algorithms-in-data-mining-2013/13_exam_alef.pdf">Exam (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Probabilistic inequalities, approximate item frequencies in streams, approximate median, and <em>k</em>-means clustering with equal cluster sizes.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2012, Exam Alef &mdash; <a href="algorithms-in-data-mining-2012/13_exam_alef.pdf">Exam (PDF)</a> &bull; <a href="algorithms-in-data-mining-2012/13_exam_alef_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Probabilistic inequalities, Monte Carlo integration of black-box functions, matrix sampling, and 2-means clustering.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2012, Exam Beit &mdash; <a href="algorithms-in-data-mining-2012/14_exam_beit.pdf">Exam (PDF)</a> &bull; <a href="algorithms-in-data-mining-2012/14_exam_beit_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                  <ul>
+                    <li>Probabilistic inequalities, estimating the number of stars in the sky, estimating the number of users on Facebook via random walks, and simple high-capacity hashing.</li>
+                  </ul>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2011, Exam Alef &mdash; <a href="algorithms-in-data-mining-2011/13_test_alef.pdf">Exam (PDF)</a> &bull; <a href="algorithms-in-data-mining-2011/13_test_alef_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <strong>Fall 2011, Exam Beit &mdash; <a href="algorithms-in-data-mining-2011/14_test_beit.pdf">Exam (PDF)</a> &bull; <a href="algorithms-in-data-mining-2011/14_test_beit_answers.pdf">Solutions (PDF)</a></strong>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Grading & Projects ###################### -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="grading">
+            <div class="col-12">
+              <h2 dir="ltr">Grading &amp; Student Projects</h2>
+              <p>Course evaluation is structured differently for undergraduate and graduate students:</p>
+              <ul>
+                <li>
+                  <p><strong>Undergraduate Students:</strong> Home assignments (50% of the grade) and a Final Exam (50% of the grade). An optional final project is available for extra credit.</p>
+                </li>
+                <li>
+                  <p><strong>Master&rsquo;s &amp; PhD Students:</strong> Home assignments (50% of the grade) and a Final Project (50% of the grade; in Fall 2013, graduate students could elect either the Final Exam or the Final Project).</p>
+                </li>
+              </ul>
+
+              <h3>Final Project Guidelines</h3>
+              <ul>
+                <li>
+                  <p>
+                    <strong>Scope &amp; Effort:</strong> Projects can contain both theoretical and experimental elements and should require roughly one to two weeks of dedicated work &mdash; comparable to studying for and taking the final exam.
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <strong>Deliverable:</strong> A single self-contained PDF report covering project motivation, background literature, dataset review, mathematical derivations, experimental results, pseudocode, and discussion.
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Selected Literature ##################### -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="literature">
+            <div class="col-12">
+              <h2 dir="ltr">Selected Literature</h2>
+              <p>Foundational papers in streaming algorithms, sketching, random projections, randomized numerical linear algebra, clustering, and high-dimensional similarity search cited in the lecture notes:</p>
+              <ul>
+                <li><p><a href="https://doi.org/10.1007/11830924_26">A Fast Random Sampling Algorithm for Sparsifying Matrices</a> &mdash; Sanjeev Arora, Elad Hazan, and Satyen Kale (2006)</p></li>
+                <li><p><a href="https://arxiv.org/abs/1006.0407">A Note on Element-wise Matrix Sparsification via Matrix-Valued Chernoff Bounds</a> &mdash; Petros Drineas and Anastasios Zouzias (2010)</p></li>
+                <li><p><a href="algorithms-in-data-mining-2011/09_rudelson-ahlswede-winter-recap.pdf">A Note on Sums of Independent Random Matrices After Ahlswede&ndash;Winter</a> &mdash; Roman Vershynin (2011)</p></li>
+                <li><p><a href="https://doi.org/10.1145/762471.762473">A Simple Algorithm for Finding Frequent Elements in Streams and Bags</a> &mdash; Richard M. Karp, Christos H. Papadimitriou, and Scott Shenker (2003)</p></li>
+                <li><p><a href="https://doi.org/10.1137/1.9781611973082.17">An Almost Optimal Unrestricted Fast Johnson-Lindenstrauss Transform</a> &mdash; Nir Ailon and Edo Liberty (2011)</p></li>
+                <li><p><a href="https://cseweb.ucsd.edu/~dasgupta/papers/jl.pdf">An Elementary Proof of the Johnson-Lindenstrauss Lemma</a> &mdash; Sanjoy Dasgupta and Anupam Gupta (1999)</p></li>
+                <li><p><a href="https://doi.org/10.1016/j.jalgor.2003.12.001">An Improved Data Stream Summary: The Count-Min Sketch and Its Applications</a> &mdash; Graham Cormode and S. Muthukrishnan (2005)</p></li>
+                <li><p><a href="http://www.vldb.org/conf/2002/S10P03.pdf">Approximate Frequency Counts over Data Streams</a> &mdash; Gurmeet Singh Manku and Rajeev Motwani (2002)</p></li>
+                <li><p><a href="https://doi.org/10.1145/1132516.1132597">Approximate Nearest Neighbors and the Fast Johnson-Lindenstrauss Transform</a> &mdash; Nir Ailon and Bernard Chazelle (2006)</p></li>
+                <li><p><a href="https://doi.org/10.1109/TKDE.2003.1198387">Clustering Data Streams: Theory and Practice</a> &mdash; Sudipto Guha, Adam Meyerson, Nina Mishra, Rajeev Motwani, and Liadan O&rsquo;Callaghan (2003)</p></li>
+                <li><p><a href="https://doi.org/10.1145/2184319.2184343">Exact Matrix Completion via Convex Optimization</a> &mdash; Emmanuel Cand&egrave;s and Benjamin Recht (2012)</p></li>
+                <li><p>Extensions of Lipschitz Mappings into a Hilbert Space &mdash; William B. Johnson and Joram Lindenstrauss (1984)</p></li>
+                <li><p><a href="https://doi.org/10.1007/3-540-45465-9_59">Finding Frequent Items in Data Streams</a> &mdash; Moses Charikar, Kevin Chen, and Martin Farach-Colton (2002)</p></li>
+                <li><p><a href="https://doi.org/10.1016/0167-6423(82)90012-0">Finding Repeated Elements</a> &mdash; Jayadev Misra and David Gries (1982)</p></li>
+                <li><p><a href="https://doi.org/10.1007/3-540-45749-6_33">Frequency Estimation of Internet Packet Streams with Limited Space</a> &mdash; Erik D. Demaine, Alejandro L&oacute;pez-Ortiz, and J. Ian Munro (2002)</p></li>
+                <li><p><a href="https://doi.org/10.1145/1015330.1015408"><em>K</em>-Means Clustering via Principal Component Analysis</a> &mdash; Chris H. Q. Ding and Xiaofeng He (2004)</p></li>
+                <li><p><a href="https://doi.org/10.1145/1283383.1283494">k-means++: The Advantages of Careful Seeding</a> &mdash; David Arthur and Sergei Vassilvitskii (2007)</p></li>
+                <li><p><a href="https://doi.org/10.1109/TIT.1982.1056489">Least Squares Quantization in PCM</a> &mdash; Stuart P. Lloyd (1982)</p></li>
+                <li><p><a href="https://doi.org/10.1145/361002.361007">Multidimensional Binary Search Trees Used for Associative Searching</a> &mdash; Jon Louis Bentley (1975)</p></li>
+                <li><p><a href="https://doi.org/10.1109/FOCS.2011.21">Near Optimal Column-Based Matrix Reconstruction</a> &mdash; Christos Boutsidis, Petros Drineas, and Malik Magdon-Ismail (2011)</p></li>
+                <li><p><a href="https://doi.org/10.1007/3-540-45465-9_39">New Algorithms for Subset Query, Partial Match, Orthogonal Range Searching, and Related Problems</a> &mdash; Moses Charikar, Piotr Indyk, and Rina Panigrahy (2002)</p></li>
+                <li><p>Pass Efficient Algorithms for Approximating Large Matrices &mdash; Petros Drineas and Ravi Kannan (2003)</p></li>
+                <li><p><a href="https://doi.org/10.1016/0022-0000(85)90042-X">Probabilistic Counting Algorithms for Data Base Applications</a> &mdash; Philippe Flajolet and G. Nigel Martin (1985)</p></li>
+                <li><p><a href="https://doi.org/10.1145/1255443.1255449">Sampling from Large Matrices: An Approach Through Geometric Functional Analysis</a> &mdash; Mark Rudelson and Roman Vershynin (2007)</p></li>
+                <li><p><a href="https://doi.org/10.1145/509907.509965">Similarity Estimation Techniques from Rounding Algorithms</a> &mdash; Moses Charikar (2002)</p></li>
+                <li><p>Similarity Search in High Dimensions via Hashing &mdash; Aristides Gionis, Piotr Indyk, and Rajeev Motwani (1999)</p></li>
+                <li><p><a href="https://arxiv.org/abs/1206.0594">Simple and Deterministic Matrix Sketching</a> &mdash; Edo Liberty (2012)</p></li>
+                <li><p><a href="https://doi.org/10.1006/jcss.1997.1534">Size-Estimation Framework with Applications to Transitive Closure and Reachability</a> &mdash; Edith Cohen (1997)</p></li>
+                <li><p><a href="https://doi.org/10.1145/1064092.1064114">Smaller Coresets for <em>k</em>-Median and <em>k</em>-Means Clustering</a> &mdash; Sariel Har-Peled and Akash Kushal (2005)</p></li>
+                <li><p><a href="https://arxiv.org/abs/1012.1577">Sparser Johnson-Lindenstrauss Transforms</a> &mdash; Daniel M. Kane and Jelani Nelson (2012)</p></li>
+                <li><p><a href="https://arxiv.org/abs/1211.0995">Sparsity Lower Bounds for Dimensionality Reducing Maps</a> &mdash; Jelani Nelson and Huy L. Nguyen (2012)</p></li>
+                <li><p>Spectral Relaxation for K-Means Clustering &mdash; Hongyuan Zha, Xiaofeng He, Chris H. Q. Ding, Ming Gu, and Horst D. Simon (2001)</p></li>
+                <li><p><a href="https://papers.nips.cc/paper/2009/hash/00ac8ed3b4327bdd4ebbebcb2ba10a00-Abstract.html">Streaming <em>k</em>-Means Approximation</a> &mdash; Nir Ailon, Ragesh Jaiswal, and Claire Monteleoni (2009)</p></li>
+                <li><p><a href="https://doi.org/10.1109/18.985947">Strong Converse for Identification via Quantum Channels</a> &mdash; Rudolf Ahlswede and Andreas Winter (2002)</p></li>
+                <li><p><a href="https://doi.org/10.1145/237814.237823">The Space Complexity of Approximating the Frequency Moments</a> &mdash; Noga Alon, Yossi Matias, and Mario Szegedy (1996)</p></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ########################################################## -->
+          <!-- ################ Contribute & Related #################### -->
+          <!-- ########################################################## -->
+          <div class="row my-5" id="contribute">
+            <div class="col-12">
+              <h2 dir="ltr">Contribute &amp; Open Course Materials</h2>
+              <p>
+                All class notes, assignments, and exams are intended to be used freely by academics anywhere, students and professors alike. Contributions and corrections are highly encouraged in the form of pull requests or issues on <a href="https://github.com/edoliberty/algorithms-in-data-mining">GitHub</a>.
+              </p>
+              <p>
+                On Unix-like systems (e.g., macOS or Linux) with <code>bibtex</code> and <code>pdflatex</code> available, you can compile all LaTeX lecture notes directly from source:
+              </p>
+              <pre><code>git clone https://github.com/edoliberty/algorithms-in-data-mining.git
+cd algorithms-in-data-mining
+./build.sh</code></pre>
+
+              <h3>Related Classes</h3>
+              <ul>
+                <li>
+                  <p><a href="https://edoliberty.github.io/long-term-memory-in-ai/">COS 597A: Long Term Memory in AI &mdash; Vector Search and Databases, Fall '23</a> (Princeton; E. Liberty, M. Douze)</p>
+                </li>
+                <li>
+                  <p><a href="https://www.cs.columbia.edu/~andoni/algoF26/index.html">COMS E6998: Algorithms in Large Language Models, Fall '26</a> (Columbia; A. Andoni, E. Liberty)</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="nav.js"></script>
+  </body>
+</html>
